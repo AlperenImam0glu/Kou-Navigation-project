@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'map_view.dart';
+import 'package:kou_navigation_project/map_view.dart';
 
 void main() => runApp(MyApp());
 
