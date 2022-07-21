@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -13,8 +12,8 @@ class MapSampleState extends State<MapSample> {
   Completer<GoogleMapController> _controller = Completer();
 
   static double _startingLat = 40.821858;
-  static double _startingLng = 40.821858;
-  static double _startingZoom = 14.4746;
+  static double _startingLng = 29.9222003;
+  static double _startingZoom = 15;
 
   static final CameraPosition _statringLocation = CameraPosition(
     target: LatLng(_startingLat, _startingLng),
@@ -35,12 +34,13 @@ class MapSampleState extends State<MapSample> {
           centerTitle: true,
         ),
         body: GoogleMap(
-          mapType: MapType.satellite,
+          mapType: MapType.hybrid,
           myLocationEnabled: true,
           initialCameraPosition: _statringLocation,
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
           },
+          markers: _createMarker(),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton.extended(
@@ -50,6 +50,16 @@ class MapSampleState extends State<MapSample> {
         ),
       ),
     );
+  }
+
+  Set<Marker> _createMarker() {
+    return <Marker>[
+      Marker(
+        markerId: MarkerId("asdasd"),
+        position: LatLng(40.821836, 29.923525),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+      )
+    ].toSet();
   }
 
   currentLocation() async {
