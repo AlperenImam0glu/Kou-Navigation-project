@@ -26,6 +26,11 @@ class MapSampleState extends State<MapSample> {
   late LocationData _locationData;
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: new Scaffold(

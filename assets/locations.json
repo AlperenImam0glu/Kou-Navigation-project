@@ -1,0 +1,22 @@
+{
+  "Locations": [
+    {
+      "Id": "1",
+      "Name": "Bilgisayar Mühendisliği Bölümü",
+      "Lat": 40.821843,
+      "Lng": 29.923537
+    },
+    {
+      "Id": "2",
+      "Name": "Sosyal Tesisler",
+      "Lat": 40.8215391,
+      "Lng": 29.927086
+    },
+    {
+      "Id": "3",
+      "Name": "Kütüphane",
+      "Lat": 40.8217498,
+      "Lng": 29.9232552
+    }
+  ]
+}

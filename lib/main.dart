@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kou_navigation_project/map_view.dart';
+import 'package:kou_navigation_project/welcome_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,8 +8,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Google Maps Demo',
-      home: MapSample(),
+      title: 'Flutter Google Maps',
+      home: WelcomePageView(),
     );
   }
 }
