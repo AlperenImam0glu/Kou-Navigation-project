@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kou_navigation_project/location_model.dart';
+import 'package:kou_navigation_project/models/location_model.dart';
+import 'package:kou_navigation_project/models/welcome_page_models.dart';
 import 'package:kou_navigation_project/read_json_file.dart';
 import 'package:kou_navigation_project/views/map_view.dart';
 
@@ -17,17 +18,20 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   final String titleText = "KOCAELİ ÜNİVERSİTESİ";
   static LocationModels locationModel = LocationModels();
   static List? items = [];
+  static List<LocationModels> girisSayfasiModelleri =
+      WelcomePageModels().models();
 
   void returnjsonh() async {
     var data;
     data = await ReadJsonFile().readJson();
 
-    print(data[0]["Name"]);
+    // print(data[0]["Name"]);
   }
 
   @override
   void initState() {
     super.initState();
+    WelcomePageModels().models();
     returnjsonh();
   }
 
@@ -72,15 +76,35 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                 height: 30,
               ),
               _doubleElevatedButton(
-                  firstText: "Yemekhane", secondText: "Öğrenci İşerli"),
+                  firstText: "Yemekhane",
+                  secondText: "Öğrenci İşerli",
+                  firstLocation:
+                      girisSayfasiModelleri[LocationNames.Yemekhane.index],
+                  secondLocation:
+                      girisSayfasiModelleri[LocationNames.OgrenciIsleri.index]),
               _doubleElevatedButton(
                   firstText: "Mühendislik Fakültesi",
-                  secondText: "Hukuk Fakültesi"),
+                  secondText: "Hukuk Fakültesi",
+                  firstLocation: girisSayfasiModelleri[
+                      LocationNames.MuhendislikFakultesi.index],
+                  secondLocation: girisSayfasiModelleri[
+                      LocationNames.HukukFakultesi.index]),
               _doubleElevatedButton(
-                  firstText: "Kütüphane", secondText: "Rektörlük"),
-              _singleElevatedButton("Prof. Dr. Baki Komşuoğlu Kongre Merkezi"),
+                  firstText: "Kütüphane",
+                  secondText: "Rektörlük",
+                  firstLocation:
+                      girisSayfasiModelleri[LocationNames.Kutuphane.index],
+                  secondLocation:
+                      girisSayfasiModelleri[LocationNames.Rektorluk.index]),
+              _singleElevatedButton("Prof. Dr. Baki Komşuoğlu Kongre Merkezi",
+                  girisSayfasiModelleri[LocationNames.KongreMerkezi.index]),
               _doubleElevatedButton(
-                  firstText: "Mediko", secondText: "Rektörlük"),
+                  firstText: "Mediko",
+                  secondText: "Gölet",
+                  firstLocation:
+                      girisSayfasiModelleri[LocationNames.Mediko.index],
+                  secondLocation:
+                      girisSayfasiModelleri[LocationNames.Golet.index]),
               _goMapButton(context),
             ],
           ),
@@ -89,12 +113,17 @@ class _WelcomePageViewState extends State<WelcomePageView> {
     );
   }
 
-  Row _singleElevatedButton(String firstText) {
+  Row _singleElevatedButton(String firstText, LocationModels location) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MapSample(locationModel: location)));
+          },
           child: Text(firstText),
         ),
       ],
@@ -102,19 +131,20 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   }
 
   Row _doubleElevatedButton(
-      {required String firstText, required String secondText}) {
+      {required String firstText,
+      required String secondText,
+      required LocationModels firstLocation,
+      required LocationModels secondLocation}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(
           onPressed: () {
-            locationModel = LocationModels(
-                name: "Yemekhane", lat: 40.821364, lng: 29.927784);
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        MapSample(locationModel: locationModel)));
+                        MapSample(locationModel: firstLocation)));
           },
           child: Text(firstText),
         ),
@@ -122,7 +152,13 @@ class _WelcomePageViewState extends State<WelcomePageView> {
           width: 15,
         ),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        MapSample(locationModel: secondLocation)));
+          },
           child: Text(secondText),
         ),
       ],
@@ -168,4 +204,16 @@ class _WelcomePageViewState extends State<WelcomePageView> {
       ),
     );
   }
+}
+
+enum LocationNames {
+  Yemekhane,
+  OgrenciIsleri,
+  MuhendislikFakultesi,
+  HukukFakultesi,
+  Kutuphane,
+  Rektorluk,
+  KongreMerkezi,
+  Mediko,
+  Golet
 }

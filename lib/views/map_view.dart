@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:kou_navigation_project/location_model.dart';
+import 'package:kou_navigation_project/models/location_model.dart';
 import 'package:location/location.dart';
 
 class MapSample extends StatefulWidget {
@@ -52,7 +52,7 @@ class MapSampleState extends State<MapSample> {
           },
           markers: _createMarker(),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
         floatingActionButton: FloatingActionButton.extended(
           onPressed: currentLocation,
           label: Text('Konumum'),
