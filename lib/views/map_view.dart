@@ -1,16 +1,19 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:kou_navigation_project/location_model.dart';
 import 'package:location/location.dart';
 
 class MapSample extends StatefulWidget {
+  LocationModels locationModel;
+  MapSample({Key? key, required this.locationModel}) : super(key: key);
   @override
-  State<MapSample> createState() => MapSampleState();
+  State<MapSample> createState() => MapSampleState(locationModel);
 }
 
 class MapSampleState extends State<MapSample> {
   Completer<GoogleMapController> _controller = Completer();
-
+  LocationModels locationModel;
   static double _startingLat = 40.821858;
   static double _startingLng = 29.9222003;
   static double _startingZoom = 15;
@@ -24,6 +27,8 @@ class MapSampleState extends State<MapSample> {
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
   late LocationData _locationData;
+
+  MapSampleState(this.locationModel);
 
   @override
   void dispose() {
@@ -61,7 +66,8 @@ class MapSampleState extends State<MapSample> {
     return <Marker>[
       Marker(
         markerId: MarkerId("asdasd"),
-        position: LatLng(40.821836, 29.923525),
+        position: LatLng(
+            locationModel.lat ?? 40.822232, locationModel.lng ?? 29.921614),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
       )
     ].toSet();
