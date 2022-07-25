@@ -11,7 +11,7 @@ class WelcomePageModels {
     LocationModels MuhendislikFakultesi =
         LocationModels(name: "Yemekhane", lat: 40.8217655, lng: 29.9233853);
     LocationModels HukukFakultesi =
-        LocationModels(name: "Yemekhane", lat: 40.821952, lng: 29.926062);
+        LocationModels(name: "Yemekhane", lat: 40.821731, lng: 29.926083);
     LocationModels Kutuphane =
         LocationModels(name: "Yemekhane", lat: 40.821772, lng: 29.921733);
     LocationModels Rektorluk =

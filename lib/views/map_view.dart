@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
+import 'package:kou_navigation_project/routing_googleMap_app.dart';
 import 'package:location/location.dart';
 
 class MapSample extends StatefulWidget {
@@ -54,9 +55,11 @@ class MapSampleState extends State<MapSample> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: currentLocation,
-          label: Text('Konumum'),
-          icon: Icon(Icons.my_location_outlined),
+          onPressed: () {
+            MapUtils.openMap(locationModel.lat!, locationModel.lng!);
+          },
+          label: Text('Konuma Git'),
+          icon: Icon(Icons.assistant_direction_rounded),
         ),
       ),
     );
