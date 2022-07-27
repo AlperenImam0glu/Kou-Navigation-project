@@ -5,14 +5,15 @@ import 'package:kou_navigation_project/models/location_model.dart';
 import 'package:kou_navigation_project/routing_googleMap_app.dart';
 import 'package:location/location.dart';
 
-class MapSample extends StatefulWidget {
+// ignore: must_be_immutable
+class MapView extends StatefulWidget {
   LocationModels locationModel;
-  MapSample({Key? key, required this.locationModel}) : super(key: key);
+  MapView({Key? key, required this.locationModel}) : super(key: key);
   @override
-  State<MapSample> createState() => MapSampleState(locationModel);
+  State<MapView> createState() => MapViewState(locationModel);
 }
 
-class MapSampleState extends State<MapSample> {
+class MapViewState extends State<MapView> {
   Completer<GoogleMapController> _controller = Completer();
   LocationModels locationModel;
   static double _startingLat = 40.821858;
@@ -29,7 +30,7 @@ class MapSampleState extends State<MapSample> {
   late PermissionStatus _permissionGranted;
   late LocationData _locationData;
 
-  MapSampleState(this.locationModel);
+  MapViewState(this.locationModel);
 
   @override
   void dispose() {
@@ -41,7 +42,10 @@ class MapSampleState extends State<MapSample> {
     return SafeArea(
       child: new Scaffold(
         appBar: AppBar(
-          title: Text("Harita"),
+          title: Text(
+            "${locationModel.name}",
+            maxLines: 1,
+          ),
           centerTitle: true,
         ),
         body: GoogleMap(
@@ -58,8 +62,14 @@ class MapSampleState extends State<MapSample> {
           onPressed: () {
             MapUtils.openMap(locationModel.lat!, locationModel.lng!);
           },
-          label: Text('Konuma Git'),
-          icon: Icon(Icons.assistant_direction_rounded),
+          label: Text(
+            'Konuma Git',
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          icon: Icon(
+            Icons.assistant_direction_rounded,
+            color: Colors.white,
+          ),
         ),
       ),
     );
@@ -68,7 +78,7 @@ class MapSampleState extends State<MapSample> {
   Set<Marker> _createMarker() {
     return <Marker>[
       Marker(
-        markerId: MarkerId("asdasd"),
+        markerId: MarkerId("Secilen Konum"),
         position: LatLng(
             locationModel.lat ?? 40.822232, locationModel.lng ?? 29.921614),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),

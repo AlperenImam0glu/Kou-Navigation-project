@@ -3,7 +3,7 @@ class JsonLocation {
 
   JsonLocation({this.locations});
 
-  JsonLocation.fromJson(Map<String, dynamic> json) {
+  fromJson(Map<String, dynamic> json) {
     if (json['Locations'] != null) {
       locations = <Locations>[];
       json['Locations'].forEach((v) {
@@ -18,6 +18,10 @@ class JsonLocation {
       data['Locations'] = this.locations!.map((v) => v.toJson()).toList();
     }
     return data;
+  }
+
+  List<Locations>? getLocationList() {
+    return this.locations;
   }
 }
 
