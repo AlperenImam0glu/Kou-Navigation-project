@@ -1,11 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
 import 'package:kou_navigation_project/models/welcome_page_models.dart';
 import 'package:kou_navigation_project/read_json_file.dart';
 import 'package:kou_navigation_project/views/map_view.dart';
-
 import '../json_data.dart';
 
 class WelcomePageView extends StatefulWidget {
@@ -46,6 +44,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(titleText,
               style: Theme.of(context)
@@ -58,95 +57,117 @@ class _WelcomePageViewState extends State<WelcomePageView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: TextField(
-                        controller: textFieldController,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.search_outlined),
-                          hintText: 'Arama',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.black)),
-                        ),
-                        onChanged: searchLocation,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
               Expanded(
                 flex: 1,
-                child: ListView.builder(
-                  itemCount: searchList!.length,
-                  itemBuilder: (context, index) {
-                    final item = searchList![index];
-                    return ListTile(
-                      title: Text("${item.name}"),
-                      onTap: () {
-                        try {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MapView(
-                                          locationModel: LocationModels(
-                                        name: searchList![index].name,
-                                        lat: searchList![index].lat,
-                                        lng: searchList![index].lng,
-                                      ))));
-                        } catch (e) {}
-                      },
-                    );
-                  },
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: TextField(
+                            controller: textFieldController,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.search_outlined),
+                              hintText: 'Arama',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(color: Colors.black)),
+                            ),
+                            onChanged: searchLocation,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: ListView.builder(
+                    itemCount: searchList!.length,
+                    itemBuilder: (context, index) {
+                      final item = searchList![index];
+                      return Card(
+                        color: Color(0xFF4baf81),
+                        child: ListTile(
+                          leading: const Icon(Icons.room_outlined),
+                          title: Text("${item.name}"),
+                          onTap: () {
+                            pushToGoogleMaps(context, index);
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
               SizedBox(
                 height: 30,
               ),
-              _doubleElevatedButton(
-                  firstText: "Yemekhane",
-                  secondText: "Öğrenci İşleri",
-                  firstLocation:
-                      girisSayfasiModelleri[LocationNames.Yemekhane.index],
-                  secondLocation:
-                      girisSayfasiModelleri[LocationNames.OgrenciIsleri.index]),
-              _doubleElevatedButton(
-                  firstText: "Mühendislik Fakültesi",
-                  secondText: "Hukuk Fakültesi",
-                  firstLocation: girisSayfasiModelleri[
-                      LocationNames.MuhendislikFakultesi.index],
-                  secondLocation: girisSayfasiModelleri[
-                      LocationNames.HukukFakultesi.index]),
-              _doubleElevatedButton(
-                  firstText: "Kütüphane",
-                  secondText: "Rektörlük",
-                  firstLocation:
-                      girisSayfasiModelleri[LocationNames.Kutuphane.index],
-                  secondLocation:
-                      girisSayfasiModelleri[LocationNames.Rektorluk.index]),
-              _singleElevatedButton("Prof. Dr. Baki Komşuoğlu Kongre Merkezi",
-                  girisSayfasiModelleri[LocationNames.KongreMerkezi.index]),
-              _doubleElevatedButton(
-                  firstText: "Mediko",
-                  secondText: "Gölet",
-                  firstLocation:
-                      girisSayfasiModelleri[LocationNames.Mediko.index],
-                  secondLocation:
-                      girisSayfasiModelleri[LocationNames.Golet.index]),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: [
+                    _doubleElevatedButton(
+                        firstText: "Yemekhane",
+                        secondText: "Öğrenci İşleri",
+                        firstLocation: girisSayfasiModelleri[
+                            LocationNames.Yemekhane.index],
+                        secondLocation: girisSayfasiModelleri[
+                            LocationNames.OgrenciIsleri.index]),
+                    _doubleElevatedButton(
+                        firstText: "Mühendislik Fakültesi",
+                        secondText: "Hukuk Fakültesi",
+                        firstLocation: girisSayfasiModelleri[
+                            LocationNames.MuhendislikFakultesi.index],
+                        secondLocation: girisSayfasiModelleri[
+                            LocationNames.HukukFakultesi.index]),
+                    _doubleElevatedButton(
+                        firstText: "Kütüphane",
+                        secondText: "Rektörlük",
+                        firstLocation: girisSayfasiModelleri[
+                            LocationNames.Kutuphane.index],
+                        secondLocation: girisSayfasiModelleri[
+                            LocationNames.Rektorluk.index]),
+                    _singleElevatedButton(
+                        "Prof. Dr. Baki Komşuoğlu Kongre Merkezi",
+                        girisSayfasiModelleri[
+                            LocationNames.KongreMerkezi.index]),
+                    _doubleElevatedButton(
+                      firstText: "Mediko",
+                      secondText: "Gölet",
+                      firstLocation:
+                          girisSayfasiModelleri[LocationNames.Mediko.index],
+                      secondLocation:
+                          girisSayfasiModelleri[LocationNames.Golet.index],
+                    ),
+                  ],
+                ),
+              ),
               // _goMapButton(context),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void pushToGoogleMaps(BuildContext context, int index) {
+    try {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MapView(
+                      locationModel: LocationModels(
+                    name: searchList![index].name,
+                    lat: searchList![index].lat,
+                    lng: searchList![index].lng,
+                  ))));
+    } catch (e) {}
   }
 
   TextFormField _SearchTextField() {

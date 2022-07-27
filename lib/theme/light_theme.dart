@@ -20,10 +20,11 @@ class LighTheme {
           const FloatingActionButtonThemeData(backgroundColor: Colors.green),
       buttonTheme: ButtonThemeData(
         colorScheme: ColorScheme.light(
-            onPrimary: Colors.green, onSecondary: _lightColor.blueMenia),
+            onPrimary: Color.fromRGBO(76, 175, 80, 1),
+            onSecondary: _lightColor.blueMenia),
       ),
       colorScheme: const ColorScheme.light(
-        primary: Color.fromARGB(255, 52, 160, 45),
+        primary: Color.fromRGBO(52, 160, 45, 1),
       ),
       textTheme: ThemeData.light().textTheme.copyWith(
             subtitle1: TextStyle(fontSize: 25, color: _lightColor._textColor),
@@ -33,6 +34,6 @@ class LighTheme {
 }
 
 class _LightColor {
-  final Color _textColor = Color.fromARGB(255, 247, 152, 152);
+  final Color _textColor = Color.fromARGB(255, 0, 0, 0);
   final Color blueMenia = const Color.fromARGB(95, 188, 248, 1);
 }

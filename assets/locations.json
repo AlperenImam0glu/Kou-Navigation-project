@@ -17,6 +17,24 @@
       "Name": "Kütüphane",
       "Lat": 40.821772,
       "Lng": 29.921733
+    },
+    {
+      "Id": "1",
+      "Name": "Elektrik Mühendisliği",
+      "Lat": 40.821843,
+      "Lng": 29.923537
+    },
+    {
+      "Id": "1",
+      "Name": "Makina Mühendisliği",
+      "Lat": 40.821843,
+      "Lng": 29.923537
+    },
+    {
+      "Id": "1",
+      "Name": "Elektronik Haberleşme Mühendisliği",
+      "Lat": 40.821843,
+      "Lng": 29.923537
     }
   ]
 }
