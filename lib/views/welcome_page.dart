@@ -46,11 +46,13 @@ class _WelcomePageViewState extends State<WelcomePageView> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text(titleText,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline5
-                  ?.copyWith(color: Colors.white)),
+          title: Text(
+            titleText,
+            style: Theme.of(context)
+                .textTheme
+                .headline5
+                ?.copyWith(color: Colors.white),
+          ),
           centerTitle: true,
         ),
         body: Center(
@@ -66,45 +68,20 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Flexible(
-                          child: TextField(
-                            controller: textFieldController,
-                            decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.search_outlined),
-                              hintText: 'Arama',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide: BorderSide(color: Colors.black)),
-                            ),
-                            onChanged: searchLocation,
-                          ),
+                          child: _searchTextField(),
                         ),
                       ],
                     ),
                   ),
                 ),
               ),
-              Expanded(
+              /*  Expanded(
                 flex: 1,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: ListView.builder(
-                    itemCount: searchList!.length,
-                    itemBuilder: (context, index) {
-                      final item = searchList![index];
-                      return Card(
-                        color: Color(0xFF4baf81),
-                        child: ListTile(
-                          leading: const Icon(Icons.room_outlined),
-                          title: Text("${item.name}"),
-                          onTap: () {
-                            pushToGoogleMaps(context, index);
-                          },
-                        ),
-                      );
-                    },
-                  ),
+                  child: _customListView(),
                 ),
-              ),
+              ),*/
               SizedBox(
                 height: 30,
               ),
@@ -153,6 +130,52 @@ class _WelcomePageViewState extends State<WelcomePageView> {
           ),
         ),
       ),
+    );
+  }
+
+  TextField _searchTextField() {
+    return TextField(
+      controller: textFieldController,
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.search_outlined),
+        hintText: 'Arama',
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: Colors.black)),
+      ),
+      onChanged: searchLocation,
+    );
+  }
+
+  ListView _customListView() {
+    return ListView.builder(
+      itemCount: searchList!.length,
+      itemBuilder: (context, index) {
+        final item = searchList![index];
+        return Card(
+          shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          color: Color.fromARGB(255, 211, 141, 213),
+          child: ListTile(
+            leading: const Icon(
+              Icons.room_outlined,
+              size: 35,
+              color: Colors.black,
+            ),
+            trailing: const Icon(
+              Icons.assistant_direction_rounded,
+              size: 35,
+              color: Colors.black,
+            ),
+            title: Text(
+              "${item.name}",
+              style: Theme.of(context).textTheme.headline6,
+            ),
+            onTap: () {
+              pushToGoogleMaps(context, index);
+            },
+          ),
+        );
+      },
     );
   }
 
