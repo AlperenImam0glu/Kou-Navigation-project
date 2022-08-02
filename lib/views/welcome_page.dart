@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
 import 'package:kou_navigation_project/models/welcome_page_models.dart';
-import 'package:kou_navigation_project/read_json_file.dart';
+import 'package:kou_navigation_project/core/read_json_file.dart';
 import 'package:kou_navigation_project/views/map_view.dart';
-import '../json_data.dart';
+import '../models/json_data.dart';
 
 class WelcomePageView extends StatefulWidget {
   WelcomePageView({Key? key}) : super(key: key);

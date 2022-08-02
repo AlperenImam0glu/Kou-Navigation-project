@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:kou_navigation_project/json_data.dart';
+import 'package:kou_navigation_project/models/json_data.dart';
 
 class ReadJsonFile {
   Future readJson() async {
