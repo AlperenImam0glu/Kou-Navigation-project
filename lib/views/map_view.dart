@@ -16,7 +16,7 @@ class MapView extends StatefulWidget {
 class MapViewState extends State<MapView> {
   Completer<GoogleMapController> _controller = Completer();
   LocationModels locationModel;
-  static double _startingLat = 40.821858;
+  static double _startingLat = 40.821772;
   static double _startingLng = 29.9222003;
   static double _startingZoom = 15;
 
@@ -33,8 +33,12 @@ class MapViewState extends State<MapView> {
   MapViewState(this.locationModel);
 
   @override
-  void dispose() {
-    super.dispose();
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _startingLat = locationModel.lat!;
+    _startingLng = locationModel.lng!;
+    _goCurrentLocation(lat: locationModel.lat!, lng: locationModel.lng!);
   }
 
   @override
@@ -111,7 +115,7 @@ class MapViewState extends State<MapView> {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(
       CameraUpdate.newCameraPosition(
-        CameraPosition(target: LatLng(lat, lng), zoom: 17.0),
+        CameraPosition(target: LatLng(lat, lng), zoom: 16),
       ),
     );
   }

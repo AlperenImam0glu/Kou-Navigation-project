@@ -75,13 +75,13 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                   ),
                 ),
               ),
-              /*  Expanded(
-                flex: 1,
+              Expanded(
+                flex: 2,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: _customListView(),
                 ),
-              ),*/
+              ),
               SizedBox(
                 height: 30,
               ),
@@ -153,8 +153,9 @@ class _WelcomePageViewState extends State<WelcomePageView> {
       itemBuilder: (context, index) {
         final item = searchList![index];
         return Card(
-          shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          color: Color.fromARGB(255, 211, 141, 213),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          color: Colors.grey[500],
           child: ListTile(
             leading: const Icon(
               Icons.room_outlined,
@@ -256,27 +257,6 @@ class _WelcomePageViewState extends State<WelcomePageView> {
           child: Text(secondText),
         ),
       ],
-    );
-  }
-
-  ElevatedButton _goMapButton(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(padding: EdgeInsets.all(10)),
-      child: Text(
-        "Harita",
-        style: Theme.of(context)
-            .textTheme
-            .headline6
-            ?.copyWith(color: Colors.white),
-      ),
-      onPressed: () {
-        locationModel =
-            LocationModels(name: "Yemekhane", lat: 40.821364, lng: 29.927784);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MapView(locationModel: locationModel)));
-      },
     );
   }
 
