@@ -20,7 +20,7 @@ class MapViewState extends State<MapView> {
   static double _startingLat = 40.821772;
   static double _startingLng = 29.9222003;
   static double _startingZoom = 15;
-  static const LatLng start = LatLng(40.821772, 29.9222003);
+  static LatLng start = LatLng(40.821772, 29.9222003);
   static LatLng finish = LatLng(40.824689, 29.921045);
 
   var lo;
@@ -34,7 +34,7 @@ class MapViewState extends State<MapView> {
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
   late LocationData locationData;
-  LocationData? currentLocations;
+  static LocationData? currentLocations;
 
   MapViewState(this.locationModel);
 
@@ -42,6 +42,10 @@ class MapViewState extends State<MapView> {
     Location location = Location();
     location.getLocation().then((location) {
       currentLocations = location;
+    });
+    location.onLocationChanged.listen((newLoc) {
+      currentLocations = newLoc;
+      setState(() {});
     });
   }
 
@@ -55,7 +59,7 @@ class MapViewState extends State<MapView> {
     getCurrentLocation();
 
     _goCurrentLocation(lat: locationModel.lat!, lng: locationModel.lng!);
-    getPolyPoints();
+    //  getPolyPoints();
   }
 
   List<LatLng> polylineCoordinates = [];
@@ -67,6 +71,7 @@ class MapViewState extends State<MapView> {
       google_api_key,
       PointLatLng(_startingLat, _startingLng),
       PointLatLng(finish.latitude, finish.longitude),
+      travelMode: TravelMode.walking,
     );
 
     print(result);
@@ -99,6 +104,10 @@ class MapViewState extends State<MapView> {
                 myLocationEnabled: true,
                 initialCameraPosition: _statringLocation,
                 onMapCreated: (GoogleMapController controller) {
+                  finish = LatLng(currentLocations!.latitude!,
+                      currentLocations!.longitude!);
+                  start = LatLng(locationModel.lat!, locationModel.lng!);
+                  getPolyPoints();
                   _controller.complete(controller);
                 },
                 markers: _createMarker(),
