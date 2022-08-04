@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:kou_navigation_project/constant.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
 import 'package:kou_navigation_project/core/routing_googleMap_app.dart';
 import 'package:location/location.dart';
 
-// ignore: must_be_immutable
 class MapView extends StatefulWidget {
   LocationModels locationModel;
   MapView({Key? key, required this.locationModel}) : super(key: key);
@@ -19,6 +20,10 @@ class MapViewState extends State<MapView> {
   static double _startingLat = 40.821772;
   static double _startingLng = 29.9222003;
   static double _startingZoom = 15;
+  static const LatLng start = LatLng(40.821772, 29.9222003);
+  static LatLng finish = LatLng(40.824689, 29.921045);
+
+  var lo;
 
   static final CameraPosition _statringLocation = CameraPosition(
     target: LatLng(_startingLat, _startingLng),
@@ -28,17 +33,48 @@ class MapViewState extends State<MapView> {
   Location location = new Location();
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
-  late LocationData _locationData;
+  late LocationData locationData;
+  LocationData? currentLocations;
 
   MapViewState(this.locationModel);
 
+  void getCurrentLocation() {
+    Location location = Location();
+    location.getLocation().then((location) {
+      currentLocations = location;
+    });
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+
     _startingLat = locationModel.lat!;
     _startingLng = locationModel.lng!;
+    //currentLocation();
+    getCurrentLocation();
+
     _goCurrentLocation(lat: locationModel.lat!, lng: locationModel.lng!);
+    getPolyPoints();
+  }
+
+  List<LatLng> polylineCoordinates = [];
+
+  void getPolyPoints() async {
+    PolylinePoints polylinePoints = PolylinePoints();
+
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      google_api_key,
+      PointLatLng(_startingLat, _startingLng),
+      PointLatLng(finish.latitude, finish.longitude),
+    );
+
+    print(result);
+    if (!result.points.isEmpty) {
+      result.points.forEach((PointLatLng point) =>
+          polylineCoordinates.add(LatLng(point.latitude, point.longitude)));
+    }
+    setState(() {});
   }
 
   @override
@@ -52,15 +88,28 @@ class MapViewState extends State<MapView> {
           ),
           centerTitle: true,
         ),
-        body: GoogleMap(
-          mapType: MapType.hybrid,
-          myLocationEnabled: true,
-          initialCameraPosition: _statringLocation,
-          onMapCreated: (GoogleMapController controller) {
-            _controller.complete(controller);
-          },
-          markers: _createMarker(),
-        ),
+        body: currentLocations == null
+            ? Center(
+                child: Container(
+                    height: 100,
+                    width: 100,
+                    child: CircularProgressIndicator()))
+            : GoogleMap(
+                mapType: MapType.hybrid,
+                myLocationEnabled: true,
+                initialCameraPosition: _statringLocation,
+                onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                },
+                markers: _createMarker(),
+                polylines: {
+                  Polyline(
+                      polylineId: PolylineId("value"),
+                      points: polylineCoordinates,
+                      color: Colors.red,
+                      width: 5),
+                },
+              ),
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
@@ -82,7 +131,7 @@ class MapViewState extends State<MapView> {
   Set<Marker> _createMarker() {
     return <Marker>[
       Marker(
-        markerId: MarkerId("Secilen Konum"),
+        markerId: MarkerId("${locationModel.name}"),
         position: LatLng(
             locationModel.lat ?? 40.822232, locationModel.lng ?? 29.921614),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
@@ -105,9 +154,11 @@ class MapViewState extends State<MapView> {
         return;
       }
     }
-    _locationData = await location.getLocation();
+    locationData = await location.getLocation();
+    /*
     _goCurrentLocation(
-        lat: _locationData.latitude!, lng: _locationData.longitude!);
+        lat: locationData!.latitude!, lng: locationData!.longitude!); */
+    return location;
   }
 
   Future<void> _goCurrentLocation(
