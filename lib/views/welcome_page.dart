@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
 import 'package:kou_navigation_project/models/welcome_page_models.dart';
@@ -14,9 +13,7 @@ class WelcomePageView extends StatefulWidget {
 }
 
 class _WelcomePageViewState extends State<WelcomePageView> {
-  final String titleText = "KOCAELİ ÜNİVERSİTESİ";
-  static LocationModels locationModel = LocationModels();
-  static List? items = [];
+  final String titleText = "KOCAELİ ÜNİVERSİTESİ ULAŞIM";
   static List<LocationModels> girisSayfasiModelleri =
       WelcomePageModels().models();
   /////
@@ -194,20 +191,6 @@ class _WelcomePageViewState extends State<WelcomePageView> {
     } catch (e) {}
   }
 
-  TextFormField _SearchTextField() {
-    return TextFormField(
-      obscureText: true,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: 'Arama',
-        suffixIcon: Icon(
-          Icons.search_outlined,
-          color: Colors.black45,
-        ),
-      ),
-    );
-  }
-
   Row _singleElevatedButton(String firstText, LocationModels location) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -260,6 +243,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
     );
   }
 
+  // ignore: unused_element
   Widget _searchButton(BuildContext context) {
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(

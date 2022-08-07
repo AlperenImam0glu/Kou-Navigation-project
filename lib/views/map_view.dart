@@ -7,6 +7,7 @@ import 'package:kou_navigation_project/models/location_model.dart';
 import 'package:kou_navigation_project/core/routing_googleMap_app.dart';
 import 'package:location/location.dart';
 
+// ignore: must_be_immutable
 class MapView extends StatefulWidget {
   LocationModels locationModel;
   MapView({Key? key, required this.locationModel}) : super(key: key);
@@ -17,17 +18,16 @@ class MapView extends StatefulWidget {
 class MapViewState extends State<MapView> {
   Completer<GoogleMapController> _controller = Completer();
   LocationModels locationModel;
-  static double _startingLat = 40.821772;
-  static double _startingLng = 29.9222003;
-  static double _startingZoom = 15;
-  static LatLng start = LatLng(40.821772, 29.9222003);
-  static LatLng finish = LatLng(40.824689, 29.921045);
-
-  var lo;
+  static double _startingCameraLat = 40.821772;
+  static double _startingCameraLng = 29.9222003;
+  static double _startingCameraZoom = 15;
+  static LatLng startPoint = LatLng(40.821772, 29.9222003);
+  static LatLng finishPoint = LatLng(40.824689, 29.921045);
+  String progressTitle = "Konum Bekleniyor";
 
   static final CameraPosition _statringLocation = CameraPosition(
-    target: LatLng(_startingLat, _startingLng),
-    zoom: _startingZoom,
+    target: LatLng(_startingCameraLat, _startingCameraLng),
+    zoom: _startingCameraZoom,
   );
 
   Location location = new Location();
@@ -35,8 +35,6 @@ class MapViewState extends State<MapView> {
   late PermissionStatus _permissionGranted;
   late LocationData locationData;
   static LocationData? currentLocations;
-
-  MapViewState(this.locationModel);
 
   void getCurrentLocation() {
     Location location = Location();
@@ -49,16 +47,18 @@ class MapViewState extends State<MapView> {
     });
   }
 
+  MapViewState(this.locationModel);
+
   @override
   void initState() {
     super.initState();
 
-    _startingLat = locationModel.lat!;
-    _startingLng = locationModel.lng!;
+    _startingCameraLat = locationModel.lat!;
+    _startingCameraLng = locationModel.lng!;
     //currentLocation();
     getCurrentLocation();
 
-    _goCurrentLocation(lat: locationModel.lat!, lng: locationModel.lng!);
+    _goSelectedLocation(lat: locationModel.lat!, lng: locationModel.lng!);
     //  getPolyPoints();
   }
 
@@ -66,16 +66,15 @@ class MapViewState extends State<MapView> {
 
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
-
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       google_api_key,
-      PointLatLng(_startingLat, _startingLng),
-      PointLatLng(finish.latitude, finish.longitude),
+      PointLatLng(startPoint.latitude, startPoint.longitude),
+      PointLatLng(finishPoint.latitude, finishPoint.longitude),
       travelMode: TravelMode.walking,
     );
 
     print(result);
-    if (!result.points.isEmpty) {
+    if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) =>
           polylineCoordinates.add(LatLng(point.latitude, point.longitude)));
     }
@@ -95,25 +94,34 @@ class MapViewState extends State<MapView> {
         ),
         body: currentLocations == null
             ? Center(
-                child: Container(
-                    height: 100,
-                    width: 100,
-                    child: CircularProgressIndicator()))
+                child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                      height: 100,
+                      width: 100,
+                      child: CircularProgressIndicator()),
+                  Text(
+                    progressTitle,
+                    style: TextStyle(fontSize: 35),
+                  ),
+                ],
+              ))
             : GoogleMap(
                 mapType: MapType.hybrid,
                 myLocationEnabled: true,
                 initialCameraPosition: _statringLocation,
                 onMapCreated: (GoogleMapController controller) {
-                  finish = LatLng(currentLocations!.latitude!,
+                  startPoint = LatLng(currentLocations!.latitude!,
                       currentLocations!.longitude!);
-                  start = LatLng(locationModel.lat!, locationModel.lng!);
+                  finishPoint = LatLng(locationModel.lat!, locationModel.lng!);
                   getPolyPoints();
                   _controller.complete(controller);
                 },
                 markers: _createMarker(),
                 polylines: {
                   Polyline(
-                      polylineId: PolylineId("value"),
+                      polylineId: PolylineId("Yol"),
                       points: polylineCoordinates,
                       color: Colors.red,
                       width: 5),
@@ -148,7 +156,7 @@ class MapViewState extends State<MapView> {
     ].toSet();
   }
 
-  currentLocation() async {
+  userCurrentLocation() async {
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
@@ -164,13 +172,11 @@ class MapViewState extends State<MapView> {
       }
     }
     locationData = await location.getLocation();
-    /*
-    _goCurrentLocation(
-        lat: locationData!.latitude!, lng: locationData!.longitude!); */
+
     return location;
   }
 
-  Future<void> _goCurrentLocation(
+  Future<void> _goSelectedLocation(
       {required double lat, required double lng}) async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(

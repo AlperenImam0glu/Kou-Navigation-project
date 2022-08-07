@@ -7,7 +7,9 @@ class MapUtils {
     String _url =
         'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
 
+    // ignore: deprecated_member_use
     if (await canLaunch(_url)) {
+      // ignore: deprecated_member_use
       await launch(_url);
     } else {
       throw 'Could not open the map.';
