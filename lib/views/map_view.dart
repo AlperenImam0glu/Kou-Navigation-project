@@ -52,14 +52,10 @@ class MapViewState extends State<MapView> {
   @override
   void initState() {
     super.initState();
-
     _startingCameraLat = locationModel.lat!;
     _startingCameraLng = locationModel.lng!;
-    //currentLocation();
     getCurrentLocation();
-
     _goSelectedLocation(lat: locationModel.lat!, lng: locationModel.lng!);
-    //  getPolyPoints();
   }
 
   List<LatLng> polylineCoordinates = [];
@@ -133,8 +129,8 @@ class MapViewState extends State<MapView> {
             MapUtils.openMap(locationModel.lat!, locationModel.lng!);
           },
           label: Text(
-            'Konuma Git',
-            style: TextStyle(color: Colors.white, fontSize: 20),
+            'Harita Uygulamasında Aç',
+            style: TextStyle(color: Colors.white, fontSize: 15),
           ),
           icon: Icon(
             Icons.assistant_direction_rounded,

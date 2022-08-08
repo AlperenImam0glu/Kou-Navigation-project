@@ -35,6 +35,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
     setState(() {
       _isVisiable = false;
     });
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 
   void _changeVisiableTrue() {
@@ -60,7 +61,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
         appBar: AppBar(
           title: Text(
             titleText,
-            style: TextStyle(fontSize: MediaQuery.of(context).size.width / 20),
+            style: TextStyle(fontSize: MediaQuery.of(context).size.width / 25),
           ),
           centerTitle: true,
         ),
@@ -182,11 +183,6 @@ class _WelcomePageViewState extends State<WelcomePageView> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           color: Colors.grey[500],
           child: ListTile(
-            leading: const Icon(
-              Icons.room_outlined,
-              size: 35,
-              color: Colors.black,
-            ),
             trailing: const Icon(
               Icons.assistant_direction_rounded,
               size: 35,
@@ -224,6 +220,11 @@ class _WelcomePageViewState extends State<WelcomePageView> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(
+          style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+          ))),
           onPressed: () {
             Navigator.push(
                 context,
@@ -245,6 +246,11 @@ class _WelcomePageViewState extends State<WelcomePageView> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(
+          style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+          ))),
           onPressed: () {
             Navigator.push(
                 context,
@@ -258,6 +264,11 @@ class _WelcomePageViewState extends State<WelcomePageView> {
           width: 15,
         ),
         ElevatedButton(
+          style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+          ))),
           onPressed: () {
             Navigator.push(
                 context,
@@ -271,26 +282,6 @@ class _WelcomePageViewState extends State<WelcomePageView> {
     );
   }
 
-  // ignore: unused_element
-  Widget _searchButton(BuildContext context) {
-    return ElevatedButton.icon(
-      style: ElevatedButton.styleFrom(
-        shape: new RoundedRectangleBorder(
-          borderRadius: new BorderRadius.circular(30.0),
-        ),
-      ),
-      onPressed: () {},
-      icon: Icon(Icons.search_outlined, size: 40),
-      label: Text(
-        'Arama',
-        style: Theme.of(context)
-            .textTheme
-            .headline4
-            ?.copyWith(color: Colors.white),
-      ),
-    );
-  }
-
   void searchLocation(String query) {
     final suggestion = locationList!.where((element) {
       final name = element.name!.toLowerCase();
@@ -298,8 +289,14 @@ class _WelcomePageViewState extends State<WelcomePageView> {
       if (_isVisiable == false) {
         _changeVisiableTrue();
       }
-      return name.contains(input);
+      if (name.contains(input) == false) {
+        print("aranan bulunmamadı");
+        return name.contains(input);
+      } else {
+        return name.contains(input);
+      }
     }).toList();
+
     setState(() {
       searchList = suggestion;
     });
