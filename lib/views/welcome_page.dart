@@ -13,13 +13,13 @@ class WelcomePageView extends StatefulWidget {
 }
 
 class _WelcomePageViewState extends State<WelcomePageView> {
-  final String titleText = "KOCAELİ ÜNİVERSİTESİ ULAŞIM";
   static List<LocationModels> girisSayfasiModelleri =
       WelcomePageModels().models();
-  /////
+  final String titleText = "KOCAELİ ÜNİVERSİTESİ ULAŞIM";
   static List<Locations>? locationList = [];
   final textFieldController = TextEditingController();
   static List<Locations>? searchList = [];
+  bool _isVisiable = false;
 
   returnjsonh() async {
     locationList = await ReadJsonFile().readJson();
@@ -28,6 +28,18 @@ class _WelcomePageViewState extends State<WelcomePageView> {
     }
     searchList = locationList;
     setState(() {});
+  }
+
+  void _changeVisiableFalse() {
+    setState(() {
+      _isVisiable = false;
+    });
+  }
+
+  void _changeVisiableTrue() {
+    setState(() {
+      _isVisiable = true;
+    });
   }
 
   @override
@@ -52,78 +64,85 @@ class _WelcomePageViewState extends State<WelcomePageView> {
           ),
           centerTitle: true,
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                flex: 1,
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          child: _searchTextField(),
-                        ),
-                      ],
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => _changeVisiableFalse(),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            child: _searchTextField(),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: _customListView(),
+                Visibility(
+                  visible: _isVisiable,
+                  child: Expanded(
+                    flex: 2,
+                    child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                        child: _customListView()),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Expanded(
-                flex: 2,
-                child: Column(
-                  children: [
-                    _doubleElevatedButton(
-                        firstText: "Yemekhane",
-                        secondText: "Öğrenci İşleri",
-                        firstLocation: girisSayfasiModelleri[
-                            LocationNames.Yemekhane.index],
-                        secondLocation: girisSayfasiModelleri[
-                            LocationNames.OgrenciIsleri.index]),
-                    _doubleElevatedButton(
-                        firstText: "Mühendislik Fakültesi",
-                        secondText: "Hukuk Fakültesi",
-                        firstLocation: girisSayfasiModelleri[
-                            LocationNames.MuhendislikFakultesi.index],
-                        secondLocation: girisSayfasiModelleri[
-                            LocationNames.HukukFakultesi.index]),
-                    _doubleElevatedButton(
-                        firstText: "Kütüphane",
-                        secondText: "Rektörlük",
-                        firstLocation: girisSayfasiModelleri[
-                            LocationNames.Kutuphane.index],
-                        secondLocation: girisSayfasiModelleri[
-                            LocationNames.Rektorluk.index]),
-                    _singleElevatedButton(
-                        "Prof. Dr. Baki Komşuoğlu Kongre Merkezi",
-                        girisSayfasiModelleri[
-                            LocationNames.KongreMerkezi.index]),
-                    _doubleElevatedButton(
-                      firstText: "Mediko",
-                      secondText: "Gölet",
-                      firstLocation:
-                          girisSayfasiModelleri[LocationNames.Mediko.index],
-                      secondLocation:
-                          girisSayfasiModelleri[LocationNames.Golet.index],
-                    ),
-                  ],
+                SizedBox(
+                  height: 30,
                 ),
-              ),
-              // _goMapButton(context),
-            ],
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      _doubleElevatedButton(
+                          firstText: "Yemekhane",
+                          secondText: "Öğrenci İşleri",
+                          firstLocation: girisSayfasiModelleri[
+                              LocationNames.Yemekhane.index],
+                          secondLocation: girisSayfasiModelleri[
+                              LocationNames.OgrenciIsleri.index]),
+                      _doubleElevatedButton(
+                          firstText: "Mühendislik Fakültesi",
+                          secondText: "Hukuk Fakültesi",
+                          firstLocation: girisSayfasiModelleri[
+                              LocationNames.MuhendislikFakultesi.index],
+                          secondLocation: girisSayfasiModelleri[
+                              LocationNames.HukukFakultesi.index]),
+                      _doubleElevatedButton(
+                          firstText: "Kütüphane",
+                          secondText: "Rektörlük",
+                          firstLocation: girisSayfasiModelleri[
+                              LocationNames.Kutuphane.index],
+                          secondLocation: girisSayfasiModelleri[
+                              LocationNames.Rektorluk.index]),
+                      _singleElevatedButton(
+                          "Prof. Dr. Baki Komşuoğlu Kongre Merkezi",
+                          girisSayfasiModelleri[
+                              LocationNames.KongreMerkezi.index]),
+                      _doubleElevatedButton(
+                        firstText: "Mediko",
+                        secondText: "Gölet",
+                        firstLocation:
+                            girisSayfasiModelleri[LocationNames.Mediko.index],
+                        secondLocation:
+                            girisSayfasiModelleri[LocationNames.Golet.index],
+                      ),
+                    ],
+                  ),
+                ),
+                // _goMapButton(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -141,6 +160,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
             borderSide: BorderSide(color: Colors.black)),
       ),
       onChanged: searchLocation,
+      onTap: _changeVisiableTrue,
     );
   }
 
@@ -267,7 +287,9 @@ class _WelcomePageViewState extends State<WelcomePageView> {
     final suggestion = locationList!.where((element) {
       final name = element.name!.toLowerCase();
       final input = query.toLowerCase();
-
+      if (_isVisiable == false) {
+        _changeVisiableTrue();
+      }
       return name.contains(input);
     }).toList();
     setState(() {
