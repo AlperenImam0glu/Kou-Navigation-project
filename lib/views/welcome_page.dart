@@ -15,17 +15,18 @@ class WelcomePageView extends StatefulWidget {
 class _WelcomePageViewState extends State<WelcomePageView> {
   static List<LocationModels> girisSayfasiModelleri =
       WelcomePageModels().models();
-  final String titleText = "KOCAELİ ÜNİVERSİTESİ ULAŞIM";
+  final String titleText = "KOCAELİ ÜNİVERSİTESİ LOKASYONLAR";
   static List<Locations>? locationList = [];
   final textFieldController = TextEditingController();
   static List<Locations>? searchList = [];
   bool _isVisiable = false;
+  double width = 0;
 
   returnjsonh() async {
     locationList = await ReadJsonFile().readJson();
-    for (var element in locationList!) {
+    /* for (var element in locationList!) {
       print("${element.name}, ${element.lat}, ${element.lng}");
-    }
+    }*/
     searchList = locationList;
     setState(() {});
   }
@@ -45,6 +46,8 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   @override
   void initState() {
     super.initState();
+
+    print(width);
     WelcomePageModels().models();
     returnjsonh();
   }
@@ -57,10 +60,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
         appBar: AppBar(
           title: Text(
             titleText,
-            style: Theme.of(context)
-                .textTheme
-                .headline5
-                ?.copyWith(color: Colors.white),
+            style: TextStyle(fontSize: MediaQuery.of(context).size.width / 20),
           ),
           centerTitle: true,
         ),
@@ -75,6 +75,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                 Expanded(
                   flex: 1,
                   child: Container(
+                    alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
@@ -88,6 +89,13 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                     ),
                   ),
                 ),
+                _isVisiable
+                    ? SizedBox(
+                        height: 20,
+                      )
+                    : SizedBox(
+                        height: 0,
+                      ),
                 Visibility(
                   visible: _isVisiable,
                   child: Expanded(

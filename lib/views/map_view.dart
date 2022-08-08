@@ -73,7 +73,7 @@ class MapViewState extends State<MapView> {
       travelMode: TravelMode.walking,
     );
 
-    print(result);
+    //print(result);
     if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) =>
           polylineCoordinates.add(LatLng(point.latitude, point.longitude)));
