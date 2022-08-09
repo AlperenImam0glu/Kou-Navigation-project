@@ -20,7 +20,7 @@ class MapViewState extends State<MapView> {
   LocationModels locationModel;
   static double _startingCameraLat = 40.821772;
   static double _startingCameraLng = 29.9222003;
-  static double _startingCameraZoom = 15;
+  static double _startingCameraZoom = 16;
   static LatLng startPoint = LatLng(40.821772, 29.9222003);
   static LatLng finishPoint = LatLng(40.824689, 29.921045);
   String progressTitle = "Konum Bekleniyor";
@@ -41,10 +41,19 @@ class MapViewState extends State<MapView> {
     location.getLocation().then((location) {
       currentLocations = location;
     });
-    location.onLocationChanged.listen((newLoc) {
-      currentLocations = newLoc;
-      setState(() {});
-    });
+
+    try {
+      location.onLocationChanged.listen((newLoc) {
+        currentLocations = newLoc;
+        if (mounted) {
+          setState(() {});
+        }
+      });
+    } on Exception catch (_) {
+      print('never reached');
+    }
+
+    print(currentLocations);
   }
 
   MapViewState(this.locationModel);
@@ -84,7 +93,11 @@ class MapViewState extends State<MapView> {
         appBar: AppBar(
           title: Text(
             "${locationModel.name}",
-            maxLines: 1,
+            style: TextStyle(
+              fontSize: 15,
+            ),
+            maxLines: 3,
+            textAlign: TextAlign.center,
           ),
           centerTitle: true,
         ),
@@ -104,7 +117,7 @@ class MapViewState extends State<MapView> {
                 ],
               ))
             : GoogleMap(
-                mapType: MapType.hybrid,
+                mapType: MapType.normal,
                 myLocationEnabled: true,
                 initialCameraPosition: _statringLocation,
                 onMapCreated: (GoogleMapController controller) {
@@ -177,8 +190,19 @@ class MapViewState extends State<MapView> {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(
       CameraUpdate.newCameraPosition(
-        CameraPosition(target: LatLng(lat, lng), zoom: 16),
+        CameraPosition(target: LatLng(lat, lng), zoom: _startingCameraZoom),
       ),
     );
+  }
+
+  static final CameraPosition _kLake = CameraPosition(
+      bearing: currentLocations!.heading!,
+      target: LatLng(startPoint.latitude, startPoint.longitude),
+      tilt: 59.440717697143555,
+      zoom: 19.151926040649414);
+
+  Future<void> _goToTheLake() async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
   }
 }

@@ -36,12 +36,14 @@ class _WelcomePageViewState extends State<WelcomePageView> {
       _isVisiable = false;
     });
     FocusManager.instance.primaryFocus?.unfocus();
+    clearText();
   }
 
   void _changeVisiableTrue() {
     setState(() {
       _isVisiable = true;
     });
+    searchLocation("");
   }
 
   @override
@@ -100,53 +102,57 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                 Visibility(
                   visible: _isVisiable,
                   child: Expanded(
-                    flex: 2,
+                    flex: 7,
                     child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 25),
                         child: _customListView()),
                   ),
                 ),
-                SizedBox(
-                  height: 30,
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    children: [
-                      _doubleElevatedButton(
-                          firstText: "Yemekhane",
-                          secondText: "Öğrenci İşleri",
-                          firstLocation: girisSayfasiModelleri[
-                              LocationNames.Yemekhane.index],
-                          secondLocation: girisSayfasiModelleri[
-                              LocationNames.OgrenciIsleri.index]),
-                      _doubleElevatedButton(
-                          firstText: "Mühendislik Fakültesi",
-                          secondText: "Hukuk Fakültesi",
-                          firstLocation: girisSayfasiModelleri[
-                              LocationNames.MuhendislikFakultesi.index],
-                          secondLocation: girisSayfasiModelleri[
-                              LocationNames.HukukFakultesi.index]),
-                      _doubleElevatedButton(
-                          firstText: "Kütüphane",
-                          secondText: "Rektörlük",
-                          firstLocation: girisSayfasiModelleri[
-                              LocationNames.Kutuphane.index],
-                          secondLocation: girisSayfasiModelleri[
-                              LocationNames.Rektorluk.index]),
-                      _singleElevatedButton(
-                          "Prof. Dr. Baki Komşuoğlu Kongre Merkezi",
-                          girisSayfasiModelleri[
-                              LocationNames.KongreMerkezi.index]),
-                      _doubleElevatedButton(
-                        firstText: "Mediko",
-                        secondText: "Gölet",
-                        firstLocation:
-                            girisSayfasiModelleri[LocationNames.Mediko.index],
-                        secondLocation:
-                            girisSayfasiModelleri[LocationNames.Golet.index],
-                      ),
-                    ],
+
+                Visibility(
+                  visible: !_isVisiable,
+                  child: Expanded(
+                    flex: 2,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 30,
+                        ),
+                        _doubleElevatedButton(
+                            firstText: "Yemekhane",
+                            secondText: "Öğrenci İşleri",
+                            firstLocation: girisSayfasiModelleri[
+                                LocationNames.Yemekhane.index],
+                            secondLocation: girisSayfasiModelleri[
+                                LocationNames.OgrenciIsleri.index]),
+                        _doubleElevatedButton(
+                            firstText: "Mühendislik Fakültesi",
+                            secondText: "Hukuk Fakültesi",
+                            firstLocation: girisSayfasiModelleri[
+                                LocationNames.MuhendislikFakultesi.index],
+                            secondLocation: girisSayfasiModelleri[
+                                LocationNames.HukukFakultesi.index]),
+                        _doubleElevatedButton(
+                            firstText: "Kütüphane",
+                            secondText: "Rektörlük",
+                            firstLocation: girisSayfasiModelleri[
+                                LocationNames.Kutuphane.index],
+                            secondLocation: girisSayfasiModelleri[
+                                LocationNames.Rektorluk.index]),
+                        _singleElevatedButton(
+                            "Prof. Dr. Baki Komşuoğlu Kongre Merkezi",
+                            girisSayfasiModelleri[
+                                LocationNames.KongreMerkezi.index]),
+                        _doubleElevatedButton(
+                          firstText: "Mediko",
+                          secondText: "Gölet",
+                          firstLocation:
+                              girisSayfasiModelleri[LocationNames.Mediko.index],
+                          secondLocation:
+                              girisSayfasiModelleri[LocationNames.Golet.index],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 // _goMapButton(context),
@@ -156,6 +162,10 @@ class _WelcomePageViewState extends State<WelcomePageView> {
         ),
       ),
     );
+  }
+
+  void clearText() {
+    textFieldController.clear();
   }
 
   TextField _searchTextField() {
@@ -290,7 +300,6 @@ class _WelcomePageViewState extends State<WelcomePageView> {
         _changeVisiableTrue();
       }
       if (name.contains(input) == false) {
-        print("aranan bulunmamadı");
         return name.contains(input);
       } else {
         return name.contains(input);
