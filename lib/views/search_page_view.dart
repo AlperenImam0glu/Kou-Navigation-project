@@ -15,6 +15,7 @@ class _SearchPageViewState extends State<SearchPageView> {
   static List<Locations>? locationList = [];
   static List<Locations>? searchList = [];
   final textFieldController = TextEditingController();
+  bool _result = false;
 
   returnjsonh() async {
     locationList = await ReadJsonFile().readJson();
@@ -64,9 +65,11 @@ class _SearchPageViewState extends State<SearchPageView> {
                 ),
                 Expanded(
                   flex: 7,
-                  child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: _customListView()),
+                  child: searchList!.length < 1
+                      ? Text("BULUNAMADI")
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25),
+                          child: _customListView()),
                 ),
               ],
             ),
@@ -125,7 +128,6 @@ class _SearchPageViewState extends State<SearchPageView> {
     final suggestion = locationList!.where((element) {
       final name = element.name!.toLowerCase();
       final input = query.toLowerCase();
-
       if (name.contains(input) == false) {
         return name.contains(input);
       } else {

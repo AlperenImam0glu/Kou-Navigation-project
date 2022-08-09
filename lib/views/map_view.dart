@@ -83,7 +83,9 @@ class MapViewState extends State<MapView> {
       result.points.forEach((PointLatLng point) =>
           polylineCoordinates.add(LatLng(point.latitude, point.longitude)));
     }
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
