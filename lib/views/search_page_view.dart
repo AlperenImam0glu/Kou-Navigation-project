@@ -14,10 +14,18 @@ class SearchPageView extends StatefulWidget {
 class _SearchPageViewState extends State<SearchPageView> {
   static List<Locations>? locationList = [];
   static List<Locations>? searchList = [];
-  final textFieldController = TextEditingController();
-  bool _result = false;
 
-  returnjsonh() async {
+  final textFieldController = TextEditingController();
+
+  final String appBarTitleText = "ARAMA EKRANI";
+  final String aletDialogTextTitle = "Seçilen Lokasyon";
+  final String alertDialogAccept = "Konuma Git";
+  final String alertDialogCancel = "İptal";
+  final String textFieldTitle = "Arama";
+  final String searchFaild = "Bulunamadı";
+  final double peojectPadding = 20;
+
+  getJsonList() async {
     locationList = await ReadJsonFile().readJson();
     searchList = locationList;
     setState(() {});
@@ -26,14 +34,14 @@ class _SearchPageViewState extends State<SearchPageView> {
   @override
   void initState() {
     super.initState();
-    returnjsonh();
+    getJsonList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("ARAMA EKRANI"),
+        title: Text(appBarTitleText),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -63,14 +71,20 @@ class _SearchPageViewState extends State<SearchPageView> {
                 SizedBox(
                   height: 20,
                 ),
-                Expanded(
-                  flex: 7,
-                  child: searchList!.length < 1
-                      ? Text("BULUNAMADI")
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25),
-                          child: _customListView()),
-                ),
+                locationList?.isEmpty == true
+                    ? CircularProgressIndicator()
+                    : Expanded(
+                        flex: 7,
+                        child: searchList!.length < 1
+                            ? Text(searchFaild,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ))
+                            : Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 25),
+                                child: _customListView()),
+                      ),
               ],
             ),
           ),
@@ -84,7 +98,7 @@ class _SearchPageViewState extends State<SearchPageView> {
       controller: textFieldController,
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.search_outlined),
-        hintText: 'Arama',
+        hintText: textFieldTitle,
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
             borderSide: BorderSide(color: Colors.black)),
@@ -101,22 +115,26 @@ class _SearchPageViewState extends State<SearchPageView> {
         return Card(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          color: Color(0xFFc4c4c4),
+          color: Color.fromARGB(255, 101, 190, 142),
           child: ListTile(
             trailing: const Icon(
               Icons.assistant_direction_rounded,
               size: 35,
-              color: Colors.black,
+              color: Color(0xFF231f20),
             ),
             title: Text(
               "${item.name}",
-              style: Theme.of(context)
-                  .textTheme
-                  .headline6
-                  ?.copyWith(color: Color.fromARGB(255, 42, 41, 41)),
+              style: Theme.of(context).textTheme.headline6?.copyWith(
+                    color: Color(0xFF231f20),
+                  ),
             ),
             onTap: () {
-              pushToGoogleMaps(context, index);
+              showDialog(
+                context: context,
+                builder: (_) => _aletDialog(index),
+              );
+
+              //
             },
           ),
         );
@@ -152,5 +170,37 @@ class _SearchPageViewState extends State<SearchPageView> {
                     lng: searchList![index].lng,
                   ))));
     } catch (e) {}
+  }
+
+  AlertDialog _aletDialog(int index) {
+    return AlertDialog(
+      title: Text(aletDialogTextTitle),
+      content: Text(searchList![index].name!),
+      actions: <Widget>[
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: peojectPadding),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                child: Text(alertDialogCancel),
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        Color.fromARGB(255, 222, 97, 88))),
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+              ),
+              ElevatedButton(
+                child: Text(alertDialogAccept),
+                onPressed: () {
+                  pushToGoogleMaps(context, index);
+                },
+              )
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

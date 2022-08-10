@@ -14,11 +14,15 @@ class WelcomePageView extends StatefulWidget {
 class _WelcomePageViewState extends State<WelcomePageView> {
   static List<LocationModels> girisSayfasiModelleri =
       WelcomePageModels().models();
-  final String titleText = "KOCAELİ ÜNİVERSİTESİ LOKASYONLAR";
+
+  final String appBarTitleText = "KOCAELİ ÜNİVERSİTESİ LOKASYONLAR";
+  final String searchButtonText = "ARAMA YAPMAK İÇİN DOKUNUN";
+  final String aletDialogTextTitle = "Seçilen Lokasyon";
+  final String alertDialogAccept = "Konuma Git";
+  final String alertDialogCancel = "İptal";
+  final double peojectPadding = 20;
 
   final textFieldController = TextEditingController();
-
-  double width = 0;
 
   @override
   void initState() {
@@ -33,7 +37,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(
-            titleText,
+            appBarTitleText,
             style: TextStyle(fontSize: MediaQuery.of(context).size.width / 25),
           ),
           centerTitle: true,
@@ -47,7 +51,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                 child: SizedBox(),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: peojectPadding),
                 child: Container(
                   height: 65,
                   width: double.infinity,
@@ -117,15 +121,15 @@ class _WelcomePageViewState extends State<WelcomePageView> {
         color: Colors.grey,
       ),
       label: Text(
-        "ARAMA YAPMAK İÇİN TIKLAYINIZ",
-        style: TextStyle(color: Colors.grey),
+        searchButtonText,
+        style: TextStyle(color: Color.fromARGB(255, 128, 128, 128)),
       ),
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Colors.white),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),
-                  side: BorderSide(color: Colors.green)))),
+                  side: BorderSide(color: Color(0xFF0aa351))))),
     );
   }
 
@@ -133,20 +137,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        ElevatedButton(
-          style: ButtonStyle(
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18.0),
-          ))),
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MapView(locationModel: location)));
-          },
-          child: Text(firstText),
-        ),
+        _shortcutElevatedButton(location),
       ],
     );
   }
@@ -159,38 +150,63 @@ class _WelcomePageViewState extends State<WelcomePageView> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        ElevatedButton(
-          style: ButtonStyle(
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18.0),
-          ))),
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        MapView(locationModel: firstLocation)));
-          },
-          child: Text(firstText),
-        ),
+        _shortcutElevatedButton(firstLocation),
         SizedBox(
           width: 15,
         ),
-        ElevatedButton(
-          style: ButtonStyle(
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18.0),
-          ))),
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        MapView(locationModel: secondLocation)));
-          },
-          child: Text(secondText),
+        _shortcutElevatedButton(secondLocation),
+      ],
+    );
+  }
+
+  ElevatedButton _shortcutElevatedButton(LocationModels location) {
+    return ElevatedButton(
+      style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18.0),
+      ))),
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (_) => _aletDialog(location),
+        );
+      },
+      child: Text(location.name!),
+    );
+  }
+
+  AlertDialog _aletDialog(LocationModels location) {
+    return AlertDialog(
+      title: Text(aletDialogTextTitle),
+      content: Text(location.name!),
+      actions: <Widget>[
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: peojectPadding),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                child: Text(alertDialogCancel),
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        Color.fromARGB(255, 222, 97, 88))),
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+              ),
+              ElevatedButton(
+                child: Text(alertDialogAccept),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              MapView(locationModel: location)));
+                },
+              )
+            ],
+          ),
         ),
       ],
     );

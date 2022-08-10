@@ -20,7 +20,7 @@
     },
     {
       "Id": "4",
-      "Name": "Pror Dr. Baki Komşuoğlu Kültür Ve Kongre Merkezİ",
+      "Name": "Pror Dr. Baki Komşuoğlu Kültür Ve Kongre Merkezi",
       "Lat": 40.822487,
       "Lng": 29.921363
     },
@@ -38,7 +38,7 @@
     },
     {
       "Id": "7",
-      "Name": "İktisadi Ve İdari Bilimler Fakültesİ",
+      "Name": "İktisadi Ve İdari Bilimler Fakültesi",
       "Lat": 40.822373,
       "Lng": 29.923929
     },
@@ -56,27 +56,27 @@
     },
     {
       "Id": "10",
-      "Name": "Mühendislik Fakültesi B Blok",
+      "Name": "Mühendislik Fakültesi B Kapısı",
       "Lat": 40.821870,
       "Lng": 29.923585
     },
     {
       "Id": "11",
-      "Name": "Mühendislik Fakültesi A Blok",
+      "Name": "Mühendislik Fakültesi A Kapısı",
       "Lat": 40.820709,
       "Lng": 29.922098
     },
     {
       "Id": "12",
-      "Name": "Mühendislik Fakültesi Dekanlik ",
+      "Name": "Mühendislik Fakültesi Dekanlık ",
       "Lat": 40.820960,
       "Lng": 29.923263
     },
     {
       "Id": "13",
       "Name": "Fen Bilimleri Enstitüsü ",
-      "Lat": 40.821013,
-      "Lng": 29.920273
+      "Lat": 40.821578,
+      "Lng": 29.922378
     },
     {
       "Id": "14",
@@ -110,13 +110,13 @@
     },
     {
       "Id": "19",
-      "Name": "Fen Edebİyat Fakültesİ B Blok ",
+      "Name": "Fen Edebİyat Fakültesi B Blok ",
       "Lat": 40.822129,
       "Lng": 29.926102
     },
     {
       "Id": "20",
-      "Name": "Hukuk Fakültesİ",
+      "Name": "Hukuk Fakültesi",
       "Lat": 40.821768,
       "Lng": 29.926135
     },
@@ -176,7 +176,7 @@
     },
     {
       "Id": "30",
-      "Name": "Arşiv - Ayniyant / Enformatİk",
+      "Name": "Arşiv - Ayniyant / Enformatik",
       "Lat": 1.0,
       "Lng": 1.0
     },
@@ -194,7 +194,7 @@
     },
     {
       "Id": "33",
-      "Name": "Spor Bilimleri Fakültesİ",
+      "Name": "Spor Bilimleri Fakültesi",
       "Lat": 40.816771,
       "Lng": 29.919251
     },
@@ -242,13 +242,13 @@
     },
     {
       "Id": "41",
-      "Name": "Sağlık Bilimleri Fakültesİ",
+      "Name": "Sağlık Bilimleri Fakültesi",
       "Lat": 40.816807,
       "Lng": 29.911274
     },
     {
       "Id": "42",
-      "Name": "Semahat Aracı Onkolojİ Ve Palyatif Bakim Merkezi ",
+      "Name": "Semahat Aracı Onkoloji Ve Palyatif Bakim Merkezi ",
       "Lat": 40.818049,
       "Lng": 29.912439
     },
@@ -266,7 +266,7 @@
     },
     {
       "Id": "45",
-      "Name": "Tanı Merkezİ ",
+      "Name": "Tanı Merkezi",
       "Lat": 40.825020,
       "Lng": 29.918376
     },
@@ -290,7 +290,7 @@
     },
     {
       "Id": "49",
-      "Name": "Sağlık Hİzmetleri Meslek Yüksekokulu ",
+      "Name": "Sağlık Hizmetleri Meslek Yüksekokulu ",
       "Lat": 1.0,
       "Lng": 1.0
     },
@@ -302,9 +302,9 @@
     },
     {
       "Id": "51",
-      "Name": "Kafeterya ",
-      "Lat": 1.0,
-      "Lng": 1.0
+      "Name": "Kafeterya - Tepe Kafe",
+      "Lat": 40.823453,
+      "Lng": 29.916778
     },
     {
       "Id": "52",

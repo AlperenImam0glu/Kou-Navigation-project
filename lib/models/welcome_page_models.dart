@@ -16,8 +16,10 @@ class WelcomePageModels {
         LocationModels(name: "Kütüphane", lat: 40.821772, lng: 29.921733);
     LocationModels rektorluk =
         LocationModels(name: "Rektörlük", lat: 40.822693, lng: 29.922210);
-    LocationModels kongreMerkezi =
-        LocationModels(name: "Kongre Merkezi", lat: 40.822423, lng: 29.921349);
+    LocationModels kongreMerkezi = LocationModels(
+        name: "Prof. Dr. Baki Komşuoğlu Kongre Merkezi",
+        lat: 40.822423,
+        lng: 29.921349);
     LocationModels mediko =
         LocationModels(name: "Mediko", lat: 40.822255, lng: 29.927764);
     LocationModels golet =

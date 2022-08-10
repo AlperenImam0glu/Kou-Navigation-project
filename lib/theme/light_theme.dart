@@ -17,13 +17,13 @@ class LighTheme {
       ),
       scaffoldBackgroundColor: Color(0xFFfbfbfb),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: Color(0xFF0ba354)),
+          backgroundColor: Color(0xFF0aa351)),
       buttonTheme: ButtonThemeData(
         colorScheme: ColorScheme.light(
-            onPrimary: Color(0xFF0ba354), onSecondary: _lightColor.blueMenia),
+            onPrimary: Color(0xFF0aa351), onSecondary: _lightColor.blueMenia),
       ),
       colorScheme: const ColorScheme.light(
-        primary: Color(0xFF0ba354),
+        primary: Color(0xFF00aa351),
       ),
       textTheme: ThemeData.light().textTheme.copyWith(
             subtitle1: TextStyle(fontSize: 25, color: _lightColor._textColor),
@@ -35,5 +35,5 @@ class LighTheme {
 class _LightColor {
   final Color _textColor = Color.fromARGB(255, 0, 0, 0);
   final Color blueMenia = const Color.fromARGB(95, 188, 248, 1);
-  final Color kouGreen = const Color(0xFF0ba354);
+  static Color kouGreen = const Color(0xFF0aa351);
 }
