@@ -20,7 +20,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   final String aletDialogTextTitle = "Seçilen Lokasyon";
   final String alertDialogAccept = "Konuma Git";
   final String alertDialogCancel = "İptal";
-  final double peojectPadding = 20;
+  final double projectPadding = 20;
 
   final textFieldController = TextEditingController();
 
@@ -34,7 +34,6 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(
             appBarTitleText,
@@ -46,12 +45,11 @@ class _WelcomePageViewState extends State<WelcomePageView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(
-                flex: 1,
-                child: SizedBox(),
-              ),
+              SizedBox(height: 20),
+              Expanded(child: Image.asset("assets/icons/kou_logo.png")),
+              SizedBox(height: 20),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: peojectPadding),
+                padding: EdgeInsets.symmetric(horizontal: projectPadding),
                 child: Container(
                   height: 65,
                   width: double.infinity,
@@ -179,10 +177,13 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   AlertDialog _aletDialog(LocationModels location) {
     return AlertDialog(
       title: Text(aletDialogTextTitle),
-      content: Text(location.name!),
+      content: Text(
+        location.name!,
+        textAlign: TextAlign.center,
+      ),
       actions: <Widget>[
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: peojectPadding),
+          padding: EdgeInsets.symmetric(horizontal: projectPadding),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

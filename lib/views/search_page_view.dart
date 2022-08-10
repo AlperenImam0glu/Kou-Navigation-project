@@ -23,7 +23,7 @@ class _SearchPageViewState extends State<SearchPageView> {
   final String alertDialogCancel = "İptal";
   final String textFieldTitle = "Arama";
   final String searchFaild = "Bulunamadı";
-  final double peojectPadding = 20;
+  final double projectPadding = 20;
 
   getJsonList() async {
     locationList = await ReadJsonFile().readJson();
@@ -115,7 +115,7 @@ class _SearchPageViewState extends State<SearchPageView> {
         return Card(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          color: Color.fromARGB(255, 101, 190, 142),
+          color: Color.fromARGB(255, 168, 202, 184),
           child: ListTile(
             trailing: const Icon(
               Icons.assistant_direction_rounded,
@@ -175,10 +175,13 @@ class _SearchPageViewState extends State<SearchPageView> {
   AlertDialog _aletDialog(int index) {
     return AlertDialog(
       title: Text(aletDialogTextTitle),
-      content: Text(searchList![index].name!),
+      content: Text(
+        searchList![index].name!,
+        textAlign: TextAlign.center,
+      ),
       actions: <Widget>[
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: peojectPadding),
+          padding: EdgeInsets.symmetric(horizontal: projectPadding),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
