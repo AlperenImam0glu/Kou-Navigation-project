@@ -23,18 +23,49 @@ class MapViewState extends State<MapView> {
   static double _startingCameraZoom = 16;
   static LatLng startPoint = LatLng(40.821772, 29.9222003);
   static LatLng finishPoint = LatLng(40.824689, 29.921045);
+  List<LatLng> polylineCoordinates = [];
   String progressTitle = "Konum Bekleniyor";
-
-  static final CameraPosition _statringLocation = CameraPosition(
-    target: LatLng(_startingCameraLat, _startingCameraLng),
-    zoom: _startingCameraZoom,
-  );
-
+  String floatingActionButtoText = "Harita Uygulamasında Aç";
   Location location = new Location();
-  late bool _serviceEnabled;
-  late PermissionStatus _permissionGranted;
   late LocationData locationData;
   static LocationData? currentLocations;
+
+  @override
+  void initState() {
+    super.initState();
+    _startingCameraLat = locationModel.lat!;
+    _startingCameraLng = locationModel.lng!;
+    getCurrentLocation();
+    _goSelectedLocation(lat: locationModel.lat!, lng: locationModel.lng!);
+  }
+
+  MapViewState(this.locationModel);
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "${locationModel.name}",
+          style: TextStyle(
+            fontSize: 15,
+          ),
+          maxLines: 3,
+          textAlign: TextAlign.center,
+        ),
+        centerTitle: true,
+      ),
+      body: currentLocations == null
+          ? SafeArea(
+              child: _circularProgress(),
+            )
+          : SafeArea(
+              child: _GoogleMapWidget(),
+            ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButton: _floatingActionButtonGoMap(),
+    );
+  }
 
   void getCurrentLocation() {
     Location location = Location();
@@ -56,18 +87,10 @@ class MapViewState extends State<MapView> {
     print(currentLocations);
   }
 
-  MapViewState(this.locationModel);
-
-  @override
-  void initState() {
-    super.initState();
-    _startingCameraLat = locationModel.lat!;
-    _startingCameraLng = locationModel.lng!;
-    getCurrentLocation();
-    _goSelectedLocation(lat: locationModel.lat!, lng: locationModel.lng!);
-  }
-
-  List<LatLng> polylineCoordinates = [];
+  static final CameraPosition _statringLocation = CameraPosition(
+    target: LatLng(_startingCameraLat, _startingCameraLng),
+    zoom: _startingCameraZoom,
+  );
 
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
@@ -88,71 +111,56 @@ class MapViewState extends State<MapView> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: new Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "${locationModel.name}",
-            style: TextStyle(
-              fontSize: 15,
-            ),
-            maxLines: 3,
-            textAlign: TextAlign.center,
-          ),
-          centerTitle: true,
-        ),
-        body: currentLocations == null
-            ? Center(
-                child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                      height: 100,
-                      width: 100,
-                      child: CircularProgressIndicator()),
-                  Text(
-                    progressTitle,
-                    style: TextStyle(fontSize: 35),
-                  ),
-                ],
-              ))
-            : GoogleMap(
-                mapType: MapType.normal,
-                myLocationEnabled: true,
-                initialCameraPosition: _statringLocation,
-                onMapCreated: (GoogleMapController controller) {
-                  startPoint = LatLng(currentLocations!.latitude!,
-                      currentLocations!.longitude!);
-                  finishPoint = LatLng(locationModel.lat!, locationModel.lng!);
-                  getPolyPoints();
-                  _controller.complete(controller);
-                },
-                markers: _createMarker(),
-                polylines: {
-                  Polyline(
-                      polylineId: PolylineId("Yol"),
-                      points: polylineCoordinates,
-                      color: Colors.red,
-                      width: 5),
-                },
-              ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            MapUtils.openMap(locationModel.lat!, locationModel.lng!);
-          },
-          label: Text(
-            'Harita Uygulamasında Aç',
-            style: TextStyle(color: Colors.white, fontSize: 15),
-          ),
-          icon: Icon(
-            Icons.assistant_direction_rounded,
-            color: Colors.white,
-          ),
-        ),
+  FloatingActionButton _floatingActionButtonGoMap() {
+    return FloatingActionButton.extended(
+      onPressed: () {
+        MapUtils.openMap(locationModel.lat!, locationModel.lng!);
+      },
+      label: Text(
+        floatingActionButtoText,
+        style: TextStyle(color: Colors.white, fontSize: 15),
       ),
+      icon: Icon(
+        Icons.assistant_direction_rounded,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Center _circularProgress() {
+    return Center(
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(height: 100, width: 100, child: CircularProgressIndicator()),
+        Text(
+          progressTitle,
+          style: TextStyle(fontSize: 35),
+        ),
+      ],
+    ));
+  }
+
+  GoogleMap _GoogleMapWidget() {
+    return GoogleMap(
+      mapType: MapType.normal,
+      myLocationEnabled: true,
+      initialCameraPosition: _statringLocation,
+      onMapCreated: (GoogleMapController controller) {
+        startPoint =
+            LatLng(currentLocations!.latitude!, currentLocations!.longitude!);
+        finishPoint = LatLng(locationModel.lat!, locationModel.lng!);
+        getPolyPoints();
+        _controller.complete(controller);
+      },
+      markers: _createMarker(),
+      polylines: {
+        Polyline(
+            polylineId: PolylineId("Yol"),
+            points: polylineCoordinates,
+            color: Colors.red,
+            width: 5),
+      },
     );
   }
 
@@ -165,26 +173,6 @@ class MapViewState extends State<MapView> {
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
       )
     ].toSet();
-  }
-
-  userCurrentLocation() async {
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
-        return;
-      }
-    }
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        return;
-      }
-    }
-    locationData = await location.getLocation();
-
-    return location;
   }
 
   Future<void> _goSelectedLocation(

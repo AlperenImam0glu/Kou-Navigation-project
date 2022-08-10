@@ -15,7 +15,7 @@ class _SearchPageViewState extends State<SearchPageView> {
   static List<Locations>? locationList = [];
   static List<Locations>? searchList = [];
 
-  final textFieldController = TextEditingController();
+  var textFieldController = TextEditingController();
 
   final String appBarTitleText = "ARAMA EKRANI";
   final String aletDialogTextTitle = "Seçilen Lokasyon";
@@ -46,46 +46,49 @@ class _SearchPageViewState extends State<SearchPageView> {
       ),
       body: SafeArea(
         child: Scaffold(
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            child: _searchTextField(),
-                          ),
-                        ],
+          body: Padding(
+            padding: EdgeInsets.only(top: projectPadding / 2),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              child: _searchTextField(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                locationList?.isEmpty == true
-                    ? CircularProgressIndicator()
-                    : Expanded(
-                        flex: 7,
-                        child: searchList!.length < 1
-                            ? Text(searchFaild,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ))
-                            : Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 25),
-                                child: _customListView()),
-                      ),
-              ],
+                  SizedBox(
+                    height: projectPadding / 2,
+                  ),
+                  locationList?.isEmpty == true
+                      ? CircularProgressIndicator()
+                      : Expanded(
+                          flex: 7,
+                          child: searchList!.length < 1
+                              ? Text(searchFaild,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ))
+                              : Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 25),
+                                  child: _customListView()),
+                        ),
+                ],
+              ),
             ),
           ),
         ),
@@ -98,6 +101,15 @@ class _SearchPageViewState extends State<SearchPageView> {
       controller: textFieldController,
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.search_outlined),
+        suffixIcon: IconButton(
+          onPressed: () {
+            textFieldController.text = "";
+            setState(() {
+              searchList = locationList;
+            });
+          },
+          icon: Icon(Icons.clear),
+        ),
         hintText: textFieldTitle,
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
@@ -197,6 +209,7 @@ class _SearchPageViewState extends State<SearchPageView> {
               ElevatedButton(
                 child: Text(alertDialogAccept),
                 onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop();
                   pushToGoogleMaps(context, index);
                 },
               )

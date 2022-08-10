@@ -81,20 +81,20 @@
     {
       "Id": "14",
       "Name": "Fen Edebiyat Fakültesi Dekanlık ",
-      "Lat": 1.0,
-      "Lng": 1.0
+      "Lat": 40.820516,
+      "Lng": 29.920858
     },
     {
       "Id": "15",
       "Name": "Fen Edebiyat Fakültesi A Blok ",
-      "Lat": 1.0,
-      "Lng": 1.0
+      "Lat": 40.820983,
+      "Lng": 29.920250
     },
     {
       "Id": "16",
       "Name": "Teknoloji Fakültesi",
-      "Lat": 1.0,
-      "Lng": 1.0
+      "Lat": 40.821612,
+      "Lng": 29.920167
     },
     {
       "Id": "17",
@@ -165,20 +165,20 @@
     {
       "Id": "28",
       "Name": "Atolyeler ",
-      "Lat": 1.0,
-      "Lng": 1.0
+      "Lat": 40.819577,
+      "Lng": 29.922189
     },
     {
       "Id": "29",
       "Name": "Yapı İşleri Ve Teknik Daire Başkanlığı",
-      "Lat": 1.0,
-      "Lng": 1.0
+      "Lat": 40.819099,
+      "Lng": 29.921790
     },
     {
       "Id": "30",
       "Name": "Arşiv - Ayniyant / Enformatik",
-      "Lat": 1.0,
-      "Lng": 1.0
+      "Lat": 40.818284,
+      "Lng": 29.922806
     },
     {
       "Id": "31",
@@ -273,8 +273,8 @@
     {
       "Id": "46",
       "Name": "Poliklinik Ek Bina ",
-      "Lat": 1.0,
-      "Lng": 1.0
+      "Lat": 40.816801,
+      "Lng": 29.912695
     },
     {
       "Id": "47",
@@ -285,20 +285,20 @@
     {
       "Id": "48",
       "Name": "Morfoloji",
-      "Lat": 1.0,
-      "Lng": 1.0
+      "Lat": 40.816801,
+      "Lng": 29.912695
     },
     {
       "Id": "49",
       "Name": "Sağlık Hizmetleri Meslek Yüksekokulu ",
-      "Lat": 1.0,
-      "Lng": 1.0
+      "Lat": 40.816801,
+      "Lng": 29.912695
     },
     {
       "Id": "50",
       "Name": "Tıp Fakültesi Ek Bina",
-      "Lat": 1.0,
-      "Lng": 1.0
+      "Lat": 40.816801,
+      "Lng": 29.912695
     },
     {
       "Id": "51",

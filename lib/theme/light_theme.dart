@@ -35,5 +35,5 @@ class LighTheme {
 class _LightColor {
   final Color _textColor = Color.fromARGB(255, 0, 0, 0);
   final Color blueMenia = const Color.fromARGB(95, 188, 248, 1);
-  static Color kouGreen = const Color(0xFF0aa351);
+  //static Color kouGreen = const Color(0xFF0aa351);
 }

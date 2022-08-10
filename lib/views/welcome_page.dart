@@ -20,34 +20,37 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   final String aletDialogTextTitle = "Seçilen Lokasyon";
   final String alertDialogAccept = "Konuma Git";
   final String alertDialogCancel = "İptal";
+  final String kouLogoPath = "assets/icons/kou_logo.png";
   final double projectPadding = 20;
+  final double sizedBoxHeight = 20;
 
   final textFieldController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    WelcomePageModels().models();
+    //WelcomePageModels().models();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            appBarTitleText,
-            style: TextStyle(fontSize: MediaQuery.of(context).size.width / 25),
-          ),
-          centerTitle: true,
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: Text(
+          appBarTitleText,
+          style: TextStyle(fontSize: MediaQuery.of(context).size.width / 25),
         ),
-        body: Center(
+        centerTitle: true,
+      ),
+      body: SafeArea(
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 20),
-              Expanded(child: Image.asset("assets/icons/kou_logo.png")),
-              SizedBox(height: 20),
+              SizedBox(height: sizedBoxHeight),
+              Expanded(child: Image.asset(kouLogoPath)),
+              SizedBox(height: sizedBoxHeight),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: projectPadding),
                 child: Container(
@@ -61,7 +64,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 30,
+                      height: sizedBoxHeight,
                     ),
                     _doubleElevatedButton(
                         firstText: "Yemekhane",
@@ -199,6 +202,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
               ElevatedButton(
                 child: Text(alertDialogAccept),
                 onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
