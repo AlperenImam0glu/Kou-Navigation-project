@@ -18,17 +18,21 @@ class MapView extends StatefulWidget {
 class MapViewState extends State<MapView> {
   Completer<GoogleMapController> _controller = Completer();
   LocationModels locationModel;
-  static double _startingCameraLat = 40.821772;
-  static double _startingCameraLng = 29.9222003;
-  static double _startingCameraZoom = 16;
-  static LatLng startPoint = LatLng(40.821772, 29.9222003);
-  static LatLng finishPoint = LatLng(40.824689, 29.921045);
   List<LatLng> polylineCoordinates = [];
-  String progressTitle = "Konum Bekleniyor";
-  String floatingActionButtoText = "Harita Uygulamasında Aç";
   Location location = new Location();
   late LocationData locationData;
+  static double _startingCameraLat = 40.821772;
+  static double _startingCameraLng = 29.9222003;
+  static double _cameraZoom = 16;
+  static LatLng startPoint = LatLng(40.821772, 29.9222003);
+  static LatLng finishPoint = LatLng(40.824689, 29.921045);
+  final String progressTitle = "Konum Bekleniyor";
+  final String floatingActionButtoText = "Harita Uygulamasında Aç";
   static LocationData? currentLocations;
+  final double appBarTitleSize = 15;
+  final double circularProgressIndicatorTextSize = 35;
+  final double circularProgressIndicatorHeigt = 100;
+  final double floatingActionButtonTextSize = 15;
 
   @override
   void initState() {
@@ -45,23 +49,16 @@ class MapViewState extends State<MapView> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: Text(
-          "${locationModel.name}",
-          style: TextStyle(
-            fontSize: 15,
+          title: Text(
+            "${locationModel.name}",
+            style: TextStyle(fontSize: appBarTitleSize),
+            maxLines: 3,
+            textAlign: TextAlign.center,
           ),
-          maxLines: 3,
-          textAlign: TextAlign.center,
-        ),
-        centerTitle: true,
-      ),
+          centerTitle: true),
       body: currentLocations == null
-          ? SafeArea(
-              child: _circularProgress(),
-            )
-          : SafeArea(
-              child: _GoogleMapWidget(),
-            ),
+          ? SafeArea(child: _circularProgress())
+          : SafeArea(child: _googleMapWidget()),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: _floatingActionButtonGoMap(),
     );
@@ -81,15 +78,13 @@ class MapViewState extends State<MapView> {
         }
       });
     } on Exception catch (_) {
-      print('never reached');
+      print('Konuma ulaşılamadı');
     }
-
-    print(currentLocations);
   }
 
   static final CameraPosition _statringLocation = CameraPosition(
     target: LatLng(_startingCameraLat, _startingCameraLng),
-    zoom: _startingCameraZoom,
+    zoom: _cameraZoom,
   );
 
   void getPolyPoints() async {
@@ -118,7 +113,8 @@ class MapViewState extends State<MapView> {
       },
       label: Text(
         floatingActionButtoText,
-        style: TextStyle(color: Colors.white, fontSize: 15),
+        style: TextStyle(
+            color: Colors.white, fontSize: floatingActionButtonTextSize),
       ),
       icon: Icon(
         Icons.assistant_direction_rounded,
@@ -132,16 +128,19 @@ class MapViewState extends State<MapView> {
         child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(height: 100, width: 100, child: CircularProgressIndicator()),
+        Container(
+            height: circularProgressIndicatorHeigt,
+            width: circularProgressIndicatorHeigt,
+            child: CircularProgressIndicator()),
         Text(
           progressTitle,
-          style: TextStyle(fontSize: 35),
+          style: TextStyle(fontSize: circularProgressIndicatorTextSize),
         ),
       ],
     ));
   }
 
-  GoogleMap _GoogleMapWidget() {
+  GoogleMap _googleMapWidget() {
     return GoogleMap(
       mapType: MapType.normal,
       myLocationEnabled: true,
@@ -180,7 +179,7 @@ class MapViewState extends State<MapView> {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(
       CameraUpdate.newCameraPosition(
-        CameraPosition(target: LatLng(lat, lng), zoom: _startingCameraZoom),
+        CameraPosition(target: LatLng(lat, lng), zoom: _cameraZoom),
       ),
     );
   }

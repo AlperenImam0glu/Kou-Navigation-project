@@ -19,11 +19,15 @@ class _SearchPageViewState extends State<SearchPageView> {
 
   final String appBarTitleText = "ARAMA EKRANI";
   final String aletDialogTextTitle = "Seçilen Lokasyon";
-  final String alertDialogAccept = "Konuma Git";
+  final String alertDialogAccept = "Konumu Göster";
   final String alertDialogCancel = "İptal";
   final String textFieldTitle = "Arama";
   final String searchFaild = "Bulunamadı";
+  final String emptyText = "";
   final double projectPadding = 20;
+  final double faildSearchsize = 20;
+  final double projectBorderRadius = 20;
+  final double listViewIconSize = 35;
 
   getJsonList() async {
     locationList = await ReadJsonFile().readJson();
@@ -80,11 +84,11 @@ class _SearchPageViewState extends State<SearchPageView> {
                           child: searchList!.length < 1
                               ? Text(searchFaild,
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: faildSearchsize,
                                   ))
                               : Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 25),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: projectPadding + 5),
                                   child: _customListView()),
                         ),
                 ],
@@ -103,7 +107,7 @@ class _SearchPageViewState extends State<SearchPageView> {
         prefixIcon: Icon(Icons.search_outlined),
         suffixIcon: IconButton(
           onPressed: () {
-            textFieldController.text = "";
+            textFieldController.text = emptyText;
             setState(() {
               searchList = locationList;
             });
@@ -112,7 +116,7 @@ class _SearchPageViewState extends State<SearchPageView> {
         ),
         hintText: textFieldTitle,
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(projectBorderRadius),
             borderSide: BorderSide(color: Colors.black)),
       ),
       onChanged: searchLocation,
@@ -125,13 +129,13 @@ class _SearchPageViewState extends State<SearchPageView> {
       itemBuilder: (context, index) {
         final item = searchList![index];
         return Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(projectBorderRadius / 2)),
           color: Color.fromARGB(255, 168, 202, 184),
           child: ListTile(
-            trailing: const Icon(
+            trailing: Icon(
               Icons.assistant_direction_rounded,
-              size: 35,
+              size: listViewIconSize,
               color: Color(0xFF231f20),
             ),
             title: Text(

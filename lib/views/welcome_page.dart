@@ -15,16 +15,16 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   static List<LocationModels> girisSayfasiModelleri =
       WelcomePageModels().models();
 
+  final textFieldController = TextEditingController();
+
   final String appBarTitleText = "KOCAELİ ÜNİVERSİTESİ LOKASYONLAR";
   final String searchButtonText = "ARAMA YAPMAK İÇİN DOKUNUN";
   final String aletDialogTextTitle = "Seçilen Lokasyon";
-  final String alertDialogAccept = "Konuma Git";
+  final String alertDialogAccept = "Konumu Göster";
   final String alertDialogCancel = "İptal";
   final String kouLogoPath = "assets/icons/kou_logo.png";
   final double projectPadding = 20;
   final double sizedBoxHeight = 20;
-
-  final textFieldController = TextEditingController();
 
   @override
   void initState() {
