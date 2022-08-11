@@ -29,7 +29,6 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   @override
   void initState() {
     super.initState();
-    //WelcomePageModels().models();
   }
 
   @override
@@ -48,8 +47,8 @@ class _WelcomePageViewState extends State<WelcomePageView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: sizedBoxHeight),
-              Expanded(child: Image.asset(kouLogoPath)),
+              Expanded(flex: 1, child: SizedBox()),
+              Expanded(flex: 2, child: Image.asset(kouLogoPath)),
               SizedBox(height: sizedBoxHeight),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: projectPadding),
@@ -60,7 +59,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                 ),
               ),
               Expanded(
-                flex: 2,
+                flex: 4,
                 child: Column(
                   children: [
                     SizedBox(

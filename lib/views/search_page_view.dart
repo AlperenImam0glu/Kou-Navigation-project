@@ -14,9 +14,7 @@ class SearchPageView extends StatefulWidget {
 class _SearchPageViewState extends State<SearchPageView> {
   static List<Locations>? locationList = [];
   static List<Locations>? searchList = [];
-
   var textFieldController = TextEditingController();
-
   final String appBarTitleText = "ARAMA EKRANI";
   final String aletDialogTextTitle = "Seçilen Lokasyon";
   final String alertDialogAccept = "Konumu Göster";
@@ -131,7 +129,7 @@ class _SearchPageViewState extends State<SearchPageView> {
         return Card(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(projectBorderRadius / 2)),
-          color: Color.fromARGB(255, 168, 202, 184),
+          color: Color(0xFFcdb866),
           child: ListTile(
             trailing: Icon(
               Icons.assistant_direction_rounded,

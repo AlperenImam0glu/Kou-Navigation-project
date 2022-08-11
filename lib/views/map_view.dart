@@ -149,7 +149,9 @@ class MapViewState extends State<MapView> {
         startPoint =
             LatLng(currentLocations!.latitude!, currentLocations!.longitude!);
         finishPoint = LatLng(locationModel.lat!, locationModel.lng!);
-        getPolyPoints();
+        if (currentLocations != null) {
+          getPolyPoints();
+        }
         _controller.complete(controller);
       },
       markers: _createMarker(),
