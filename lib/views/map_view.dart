@@ -26,7 +26,7 @@ class MapViewState extends State<MapView> {
   static double _cameraZoom = 16;
   static LatLng startPoint = LatLng(40.821772, 29.9222003);
   static LatLng finishPoint = LatLng(40.824689, 29.921045);
-  final String progressTitle = "Konum Bekleniyor";
+  String progressTitle = "Konum Alınıyor";
   final String floatingActionButtoText = "Harita Uygulamasında Aç";
   static LocationData? currentLocations;
   final double appBarTitleSize = 15;
@@ -41,6 +41,27 @@ class MapViewState extends State<MapView> {
     _startingCameraLng = locationModel.lng!;
     getCurrentLocation();
     _goSelectedLocation(lat: locationModel.lat!, lng: locationModel.lng!);
+    locationTimer();
+  }
+
+  void locationTimer() {
+    var counter = 8;
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (mounted) {
+        setState(() {
+          if (counter % 2 == 0) {
+            progressTitle = "Lütfen bekleyiniz";
+          } else {
+            progressTitle = "Konum Alınıyor";
+          }
+        });
+      }
+      counter--;
+      if (counter == 0) {
+        getCurrentLocation();
+        timer.cancel();
+      }
+    });
   }
 
   MapViewState(this.locationModel);
@@ -68,8 +89,12 @@ class MapViewState extends State<MapView> {
     Location location = Location();
     location.getLocation().then((location) {
       currentLocations = location;
+      if (mounted) {
+        setState(() {});
+      }
     });
 
+    /*
     try {
       location.onLocationChanged.listen((newLoc) {
         currentLocations = newLoc;
@@ -80,6 +105,7 @@ class MapViewState extends State<MapView> {
     } on Exception catch (_) {
       print('Konuma ulaşılamadı');
     }
+*/
   }
 
   static final CameraPosition _statringLocation = CameraPosition(
@@ -129,9 +155,10 @@ class MapViewState extends State<MapView> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-            height: circularProgressIndicatorHeigt,
-            width: circularProgressIndicatorHeigt,
-            child: CircularProgressIndicator()),
+          height: circularProgressIndicatorHeigt,
+          width: circularProgressIndicatorHeigt,
+          child: CircularProgressIndicator(),
+        ),
         Text(
           progressTitle,
           style: TextStyle(fontSize: circularProgressIndicatorTextSize),

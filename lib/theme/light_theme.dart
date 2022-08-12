@@ -38,4 +38,5 @@ class _LightColor {
   //static Color kouGreen = const Color(0xFF0aa351);
   //0xFF009e49
   //0xFFcdb866
+  //0xFF231f20
 }

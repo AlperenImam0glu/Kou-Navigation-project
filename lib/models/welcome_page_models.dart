@@ -4,26 +4,28 @@ class WelcomePageModels {
   List<LocationModels> models() {
     List<LocationModels> locationList = [];
 
-    LocationModels yemekhane =
-        LocationModels(name: "Yemekhane", lat: 40.821364, lng: 29.927784);
-    LocationModels ogrenciIsleri =
-        LocationModels(name: "Öğrenci İşleri", lat: 40.821458, lng: 29.928691);
+    LocationModels yemekhane = LocationModels(
+        name: "İletişim Fakültesi", lat: 40.822925, lng: 29.923182);
+    LocationModels ogrenciIsleri = LocationModels(
+        name: "Eğitim Fakültesi", lat: 40.821848, lng: 29.924389);
     LocationModels muhendislikFakultesi = LocationModels(
-        name: "Muhendislik Fakültesi", lat: 40.8217655, lng: 29.9233853);
-    LocationModels hukukFakultesi =
-        LocationModels(name: "Hukuk Fakültesi", lat: 40.821731, lng: 29.926083);
-    LocationModels kutuphane =
-        LocationModels(name: "Kütüphane", lat: 40.821772, lng: 29.921733);
-    LocationModels rektorluk =
-        LocationModels(name: "Rektörlük", lat: 40.822693, lng: 29.922210);
+        name: "İktisadi Ve İdari Bilimler Fakültesi",
+        lat: 40.822373,
+        lng: 29.923929);
+    LocationModels hukukFakultesi = LocationModels(
+        name: "Mühendislik Fakültesi B Kapısı", lat: 40.821870, lng: 29.923585);
+    LocationModels kutuphane = LocationModels(
+        name: "Mühendislik Fakültesi A Kapısı", lat: 40.820709, lng: 29.922098);
+    LocationModels rektorluk = LocationModels(
+        name: "Fen Edebiyat Fakültesi A Blok", lat: 40.820983, lng: 29.920250);
     LocationModels kongreMerkezi = LocationModels(
-        name: "Prof. Dr. Baki Komşuoğlu Kongre Merkezi",
-        lat: 40.822423,
-        lng: 29.921349);
+        name: "Fen Edebiyat Fakültesi  B Blok", lat: 40.822129, lng: 29.926102);
     LocationModels mediko =
-        LocationModels(name: "Mediko", lat: 40.822255, lng: 29.927764);
-    LocationModels golet =
-        LocationModels(name: "Gölet", lat: 40.817432, lng: 29.921064);
+        LocationModels(name: "Hukuk Fakültesi", lat: 40.821768, lng: 29.926135);
+    LocationModels golet = LocationModels(
+        name: "Teknoloji Fakültesi", lat: 40.821612, lng: 29.920167);
+    LocationModels golet2 = LocationModels(
+        name: "İlahiyat Fakültesi", lat: 40.812755, lng: 29.920893);
 
     locationList.add(yemekhane);
     locationList.add(ogrenciIsleri);
@@ -34,6 +36,7 @@ class WelcomePageModels {
     locationList.add(kongreMerkezi);
     locationList.add(mediko);
     locationList.add(golet);
+    locationList.add(golet2);
 
     return locationList;
   }

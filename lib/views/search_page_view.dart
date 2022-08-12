@@ -26,6 +26,7 @@ class _SearchPageViewState extends State<SearchPageView> {
   final double faildSearchsize = 20;
   final double projectBorderRadius = 20;
   final double listViewIconSize = 35;
+  bool autoKeybord = true;
 
   getJsonList() async {
     locationList = await ReadJsonFile().readJson();
@@ -37,71 +38,75 @@ class _SearchPageViewState extends State<SearchPageView> {
   void initState() {
     super.initState();
     getJsonList();
+    autoKeybord = true;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(appBarTitleText),
+        title: Text(
+          appBarTitleText,
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
       ),
-      body: SafeArea(
-        child: Scaffold(
-          body: Padding(
-            padding: EdgeInsets.only(top: projectPadding / 2),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Flexible(
+      body: locationList == null
+          ? CircularProgressIndicator()
+          : SafeArea(
+              child: Scaffold(
+                body: Padding(
+                  padding: EdgeInsets.only(top: projectPadding / 2),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
                               child: _searchTextField(),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
+                        SizedBox(
+                          height: projectPadding / 2,
+                        ),
+                        locationList?.isEmpty == true
+                            ? Center(child: CircularProgressIndicator())
+                            : Expanded(
+                                flex: 7,
+                                child: searchList!.length < 1
+                                    ? Text(searchFaild,
+                                        style: TextStyle(
+                                          fontSize: faildSearchsize,
+                                        ))
+                                    : Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: projectPadding + 5),
+                                        child: _customListView()),
+                              ),
+                      ],
                     ),
                   ),
-                  SizedBox(
-                    height: projectPadding / 2,
-                  ),
-                  locationList?.isEmpty == true
-                      ? CircularProgressIndicator()
-                      : Expanded(
-                          flex: 7,
-                          child: searchList!.length < 1
-                              ? Text(searchFaild,
-                                  style: TextStyle(
-                                    fontSize: faildSearchsize,
-                                  ))
-                              : Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: projectPadding + 5),
-                                  child: _customListView()),
-                        ),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
-      ),
     );
   }
 
   TextField _searchTextField() {
     return TextField(
+      autofocus: autoKeybord,
       controller: textFieldController,
       decoration: InputDecoration(
+        isDense: true,
+        contentPadding: EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
         prefixIcon: Icon(Icons.search_outlined),
         suffixIcon: IconButton(
           onPressed: () {
@@ -129,17 +134,17 @@ class _SearchPageViewState extends State<SearchPageView> {
         return Card(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(projectBorderRadius / 2)),
-          color: Color(0xFFcdb866),
+          color: Color(0xFF009e49),
           child: ListTile(
             trailing: Icon(
               Icons.assistant_direction_rounded,
               size: listViewIconSize,
-              color: Color(0xFF231f20),
+              color: Colors.white,
             ),
             title: Text(
               "${item.name}",
               style: Theme.of(context).textTheme.headline6?.copyWith(
-                    color: Color(0xFF231f20),
+                    color: Colors.white,
                   ),
             ),
             onTap: () {
@@ -205,12 +210,16 @@ class _SearchPageViewState extends State<SearchPageView> {
                     backgroundColor: MaterialStateProperty.all<Color>(
                         Color.fromARGB(255, 222, 97, 88))),
                 onPressed: () {
+                  setState(() {
+                    autoKeybord = false;
+                  });
                   Navigator.of(context, rootNavigator: true).pop();
                 },
               ),
               ElevatedButton(
                 child: Text(alertDialogAccept),
                 onPressed: () {
+                  autoKeybord = false;
                   Navigator.of(context, rootNavigator: true).pop();
                   pushToGoogleMaps(context, index);
                 },

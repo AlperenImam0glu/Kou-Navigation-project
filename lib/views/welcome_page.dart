@@ -3,6 +3,7 @@ import 'package:kou_navigation_project/models/location_model.dart';
 import 'package:kou_navigation_project/models/welcome_page_models.dart';
 import 'package:kou_navigation_project/views/map_view.dart';
 import 'package:kou_navigation_project/views/search_page_view.dart';
+import 'package:location/location.dart';
 
 class WelcomePageView extends StatefulWidget {
   WelcomePageView({Key? key}) : super(key: key);
@@ -26,82 +27,96 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   final double projectPadding = 20;
   final double sizedBoxHeight = 20;
 
+  void getCurrentLocation() {
+    Location location = Location();
+    location.getLocation().then((location) {});
+  }
+
   @override
   void initState() {
     super.initState();
+    getCurrentLocation();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
           appBarTitleText,
-          style: TextStyle(fontSize: MediaQuery.of(context).size.width / 25),
+          style: TextStyle(
+            fontSize: (MediaQuery.of(context).size.width - 50) /
+                (appBarTitleText.length - 10),
+          ),
         ),
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(flex: 1, child: SizedBox()),
-              Expanded(flex: 2, child: Image.asset(kouLogoPath)),
-              SizedBox(height: sizedBoxHeight),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: projectPadding),
-                child: Container(
-                  height: 65,
-                  width: double.infinity,
-                  child: _searchButton(),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: projectPadding / 2),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                      padding: EdgeInsets.only(top: projectPadding),
+                      child: Image.asset(kouLogoPath)),
                 ),
-              ),
-              Expanded(
-                flex: 4,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: sizedBoxHeight,
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: projectPadding, vertical: projectPadding),
+                    child: Container(
+                      height: 50,
+                      // color: Colors.red,
+                      width: double.infinity,
+                      child: _searchButton(),
                     ),
-                    _doubleElevatedButton(
-                        firstText: "Yemekhane",
-                        secondText: "Öğrenci İşleri",
-                        firstLocation: girisSayfasiModelleri[
-                            LocationNames.Yemekhane.index],
-                        secondLocation: girisSayfasiModelleri[
-                            LocationNames.OgrenciIsleri.index]),
-                    _doubleElevatedButton(
-                        firstText: "Mühendislik Fakültesi",
-                        secondText: "Hukuk Fakültesi",
-                        firstLocation: girisSayfasiModelleri[
-                            LocationNames.MuhendislikFakultesi.index],
-                        secondLocation: girisSayfasiModelleri[
-                            LocationNames.HukukFakultesi.index]),
-                    _doubleElevatedButton(
-                        firstText: "Kütüphane",
-                        secondText: "Rektörlük",
-                        firstLocation: girisSayfasiModelleri[
-                            LocationNames.Kutuphane.index],
-                        secondLocation: girisSayfasiModelleri[
-                            LocationNames.Rektorluk.index]),
-                    _singleElevatedButton(
-                        "Prof. Dr. Baki Komşuoğlu Kongre Merkezi",
-                        girisSayfasiModelleri[
-                            LocationNames.KongreMerkezi.index]),
-                    _doubleElevatedButton(
-                      firstText: "Mediko",
-                      secondText: "Gölet",
-                      firstLocation:
-                          girisSayfasiModelleri[LocationNames.Mediko.index],
-                      secondLocation:
-                          girisSayfasiModelleri[LocationNames.Golet.index],
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+                Expanded(
+                  flex: 3,
+                  child: ListView(children: [
+                    Column(
+                      children: [
+                        _doubleElevatedButton(
+                            firstLocation: girisSayfasiModelleri[
+                                LocationNames.Yemekhane.index],
+                            secondLocation: girisSayfasiModelleri[
+                                LocationNames.OgrenciIsleri.index]),
+                        SizedBox(height: 10),
+                        _doubleElevatedButton(
+                            firstLocation: girisSayfasiModelleri[
+                                LocationNames.Kutuphane.index],
+                            secondLocation: girisSayfasiModelleri[
+                                LocationNames.HukukFakultesi.index]),
+                        SizedBox(height: 10),
+                        _doubleElevatedButton(
+                            firstLocation: girisSayfasiModelleri[
+                                LocationNames.Rektorluk.index],
+                            secondLocation: girisSayfasiModelleri[
+                                LocationNames.KongreMerkezi.index]),
+                        SizedBox(height: 10),
+                        _doubleElevatedButton(
+                            firstLocation: girisSayfasiModelleri[
+                                LocationNames.MuhendislikFakultesi.index],
+                            secondLocation: girisSayfasiModelleri[
+                                LocationNames.IlahiyatFakultesi.index]),
+                        SizedBox(height: 10),
+                        _doubleElevatedButton(
+                          firstLocation:
+                              girisSayfasiModelleri[LocationNames.Mediko.index],
+                          secondLocation:
+                              girisSayfasiModelleri[LocationNames.Golet.index],
+                        ),
+                      ],
+                    ),
+                  ]),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -133,19 +148,17 @@ class _WelcomePageViewState extends State<WelcomePageView> {
     );
   }
 
-  Row _singleElevatedButton(String firstText, LocationModels location) {
+  Row _singleElevatedButton({required LocationModels firstLocation}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _shortcutElevatedButton(location),
+        _shortcutElevatedButton(firstLocation),
       ],
     );
   }
 
   Row _doubleElevatedButton(
-      {required String firstText,
-      required String secondText,
-      required LocationModels firstLocation,
+      {required LocationModels firstLocation,
       required LocationModels secondLocation}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -172,7 +185,21 @@ class _WelcomePageViewState extends State<WelcomePageView> {
           builder: (_) => _aletDialog(location),
         );
       },
-      child: Text(location.name!),
+      child: Container(
+        width: (MediaQuery.of(context).size.width / 2) - 70,
+        height: 100,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Text(
+              location.name!,
+              maxLines: 3,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 15),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -226,5 +253,6 @@ enum LocationNames {
   Rektorluk,
   KongreMerkezi,
   Mediko,
-  Golet
+  Golet,
+  IlahiyatFakultesi
 }
