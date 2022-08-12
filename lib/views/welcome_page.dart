@@ -42,7 +42,24 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Image.asset(kouLogoPath),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.qr_code,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              // do something
+            },
+          )
+        ],
         title: Text(
+          textAlign: TextAlign.center,
+          maxLines: 2,
           appBarTitleText,
           style: TextStyle(
             fontSize: (MediaQuery.of(context).size.width - 50) /
@@ -61,23 +78,16 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                 Expanded(
                   flex: 1,
                   child: Padding(
-                      padding: EdgeInsets.only(top: projectPadding),
-                      child: Image.asset(kouLogoPath)),
-                ),
-                Expanded(
-                  child: Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: projectPadding, vertical: projectPadding),
                     child: Container(
-                      height: 50,
-                      // color: Colors.red,
                       width: double.infinity,
                       child: _searchButton(),
                     ),
                   ),
                 ),
                 Expanded(
-                  flex: 3,
+                  flex: 5,
                   child: ListView(children: [
                     Column(
                       children: [
