@@ -55,44 +55,41 @@ class _SearchPageViewState extends State<SearchPageView> {
       body: locationList == null
           ? CircularProgressIndicator()
           : SafeArea(
-              child: Scaffold(
-                body: Padding(
-                  padding: EdgeInsets.only(top: projectPadding / 2),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: _searchTextField(),
-                            ),
+              child: Padding(
+                padding: EdgeInsets.only(top: projectPadding / 2),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: _searchTextField(),
                           ),
                         ),
-                        SizedBox(
-                          height: projectPadding / 2,
-                        ),
-                        locationList?.isEmpty == true
-                            ? Center(child: CircularProgressIndicator())
-                            : Expanded(
-                                flex: 7,
-                                child: searchList!.length < 1
-                                    ? Text(searchFaild,
-                                        style: TextStyle(
-                                          fontSize: faildSearchsize,
-                                        ))
-                                    : Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: projectPadding + 5),
-                                        child: _customListView()),
-                              ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(
+                        height: projectPadding / 2,
+                      ),
+                      locationList?.isEmpty == true
+                          ? Center(child: CircularProgressIndicator())
+                          : Expanded(
+                              flex: 7,
+                              child: searchList!.length < 1
+                                  ? Text(searchFaild,
+                                      style: TextStyle(
+                                        fontSize: faildSearchsize,
+                                      ))
+                                  : Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: projectPadding + 5),
+                                      child: _customListView()),
+                            ),
+                    ],
                   ),
                 ),
               ),
