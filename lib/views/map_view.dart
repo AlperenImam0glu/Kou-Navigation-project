@@ -33,6 +33,8 @@ class MapViewState extends State<MapView> {
   final double circularProgressIndicatorTextSize = 35;
   final double circularProgressIndicatorHeigt = 100;
   final double floatingActionButtonTextSize = 15;
+  static bool locationPermission = true;
+  static bool agabuonemli = true;
 
   @override
   void initState() {
@@ -44,8 +46,18 @@ class MapViewState extends State<MapView> {
     locationTimer();
   }
 
+  void _canRoadDraw() {
+    if (currentLocations == null && locationPermission == false) {
+      if (mounted) {
+        setState(() {
+          agabuonemli = false;
+        });
+      }
+    }
+  }
+
   void locationTimer() {
-    var counter = 8;
+    var counter = 4;
     Timer.periodic(const Duration(seconds: 1), (timer) {
       if (mounted) {
         setState(() {
@@ -56,11 +68,15 @@ class MapViewState extends State<MapView> {
           }
         });
       }
-      counter--;
+
       if (counter == 0) {
-        getCurrentLocation();
+        if (currentLocations == null) {
+          locationPermission = false;
+          _canRoadDraw();
+        }
         timer.cancel();
       }
+      counter--;
     });
   }
 
@@ -78,7 +94,9 @@ class MapViewState extends State<MapView> {
           ),
           centerTitle: true),
       body: currentLocations == null
-          ? SafeArea(child: _circularProgress())
+          ? agabuonemli == true
+              ? _circularProgress()
+              : SafeArea(child: _googleMapWidgetNoLine())
           : SafeArea(child: _googleMapWidget()),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: _floatingActionButtonGoMap(),
@@ -179,6 +197,25 @@ class MapViewState extends State<MapView> {
         if (currentLocations != null) {
           getPolyPoints();
         }
+        _controller.complete(controller);
+      },
+      markers: _createMarker(),
+      polylines: {
+        Polyline(
+            polylineId: PolylineId("Yol"),
+            points: polylineCoordinates,
+            color: Colors.red,
+            width: 5),
+      },
+    );
+  }
+
+  GoogleMap _googleMapWidgetNoLine() {
+    return GoogleMap(
+      mapType: MapType.normal,
+      myLocationEnabled: true,
+      initialCameraPosition: _statringLocation,
+      onMapCreated: (GoogleMapController controller) {
         _controller.complete(controller);
       },
       markers: _createMarker(),
