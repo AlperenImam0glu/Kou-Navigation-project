@@ -18,15 +18,15 @@ class _WelcomePageViewState extends State<WelcomePageView> {
 
   final textFieldController = TextEditingController();
 
-  final String appBarTitleText = "KOCAELİ ÜNİVERSİTESİ LOKASYONLAR";
+  final String appBarTitleText = "KOCAELİ ÜNİVERSİTESİ LOKASYONLARI";
   final String searchButtonText = "ARAMA YAPMAK İÇİN DOKUNUN";
   final String aletDialogTextTitle = "Seçilen Lokasyon";
   final String alertDialogAccept = "Konumu Göster";
-  final String alertDialogCancel = "İptal";
+  final String alertDialogCancel = "Seçimi İptal Et";
   final String kouLogoPath = "assets/icons/kou_logo.png";
   final double projectPadding = 20;
   final double sizedBoxHeight = 20;
-
+  final double buttonSize = 90;
   void getCurrentLocation() {
     Location location = Location();
     location.getLocation().then((location) {});
@@ -158,15 +158,6 @@ class _WelcomePageViewState extends State<WelcomePageView> {
     );
   }
 
-  Row _singleElevatedButton({required LocationModels firstLocation}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _shortcutElevatedButton(firstLocation),
-      ],
-    );
-  }
-
   Row _doubleElevatedButton(
       {required LocationModels firstLocation,
       required LocationModels secondLocation}) {
@@ -197,7 +188,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
       },
       child: Container(
         width: (MediaQuery.of(context).size.width / 2) - 70,
-        height: 100,
+        height: buttonSize,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Center(
@@ -215,39 +206,66 @@ class _WelcomePageViewState extends State<WelcomePageView> {
 
   AlertDialog _aletDialog(LocationModels location) {
     return AlertDialog(
-      title: Text(aletDialogTextTitle),
-      content: Text(
-        location.name!,
-        textAlign: TextAlign.center,
-      ),
-      actions: <Widget>[
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: projectPadding),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton(
-                child: Text(alertDialogCancel),
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        Color.fromARGB(255, 222, 97, 88))),
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop();
-                },
+      insetPadding: EdgeInsets.symmetric(horizontal: 0),
+      contentPadding: EdgeInsets.symmetric(horizontal: 0),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      title: Center(child: Text(aletDialogTextTitle)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+      content: Builder(
+        builder: (context) {
+          var width = MediaQuery.of(context).size.width * 0.9;
+
+          return Container(
+            //height: height,
+            width: width,
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                location.name!,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.grey[800],
+                  fontWeight: FontWeight.w900,
+                  fontStyle: FontStyle.italic,
+                  fontFamily: 'Open Sans',
+                ),
               ),
-              ElevatedButton(
-                child: Text(alertDialogAccept),
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop();
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              MapView(locationModel: location)));
-                },
-              )
-            ],
-          ),
+            ),
+          );
+        },
+      ),
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              child: Text(alertDialogCancel),
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Color(0xFF9e1200))),
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            ElevatedButton(
+              child: Text(
+                alertDialogAccept,
+                style: TextStyle(),
+              ),
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MapView(locationModel: location)));
+              },
+            ),
+          ],
         ),
       ],
     );

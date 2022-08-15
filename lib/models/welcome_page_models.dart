@@ -19,7 +19,7 @@ class WelcomePageModels {
     LocationModels rektorluk = LocationModels(
         name: "Fen Edebiyat Fakültesi A Blok", lat: 40.820983, lng: 29.920250);
     LocationModels kongreMerkezi = LocationModels(
-        name: "Fen Edebiyat Fakültesi  B Blok", lat: 40.822129, lng: 29.926102);
+        name: "Fen Edebiyat Fakültesi B Blok", lat: 40.822129, lng: 29.926102);
     LocationModels mediko =
         LocationModels(name: "Hukuk Fakültesi", lat: 40.821768, lng: 29.926135);
     LocationModels golet = LocationModels(

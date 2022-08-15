@@ -18,7 +18,7 @@ class _SearchPageViewState extends State<SearchPageView> {
   final String appBarTitleText = "ARAMA EKRANI";
   final String aletDialogTextTitle = "Seçilen Lokasyon";
   final String alertDialogAccept = "Konumu Göster";
-  final String alertDialogCancel = "İptal";
+  final String alertDialogCancel = "Seçimi İptal Et";
   final String textFieldTitle = "Arama";
   final String searchFaild = "Bulunamadı";
   final String emptyText = "";
@@ -102,7 +102,6 @@ class _SearchPageViewState extends State<SearchPageView> {
 
   TextField _searchTextField() {
     return TextField(
-      autofocus: autoKeybord,
       controller: textFieldController,
       decoration: InputDecoration(
         isDense: true,
@@ -119,8 +118,8 @@ class _SearchPageViewState extends State<SearchPageView> {
         ),
         hintText: textFieldTitle,
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(projectBorderRadius),
-            borderSide: BorderSide(color: Colors.black)),
+          borderRadius: BorderRadius.circular(projectBorderRadius),
+        ),
       ),
       onChanged: searchLocation,
     );
@@ -177,7 +176,7 @@ class _SearchPageViewState extends State<SearchPageView> {
     });
   }
 
-  void pushToGoogleMaps(BuildContext context, int index) {
+  void _openWithMapApp(BuildContext context, int index) {
     try {
       Navigator.push(
           context,
@@ -193,39 +192,64 @@ class _SearchPageViewState extends State<SearchPageView> {
 
   AlertDialog _aletDialog(int index) {
     return AlertDialog(
-      title: Text(aletDialogTextTitle),
-      content: Text(
-        searchList![index].name!,
-        textAlign: TextAlign.center,
-      ),
-      actions: <Widget>[
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: projectPadding),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton(
-                child: Text(alertDialogCancel),
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        Color.fromARGB(255, 222, 97, 88))),
-                onPressed: () {
-                  setState(() {
-                    autoKeybord = false;
-                  });
-                  Navigator.of(context, rootNavigator: true).pop();
-                },
+      insetPadding: EdgeInsets.symmetric(horizontal: 0),
+      contentPadding: EdgeInsets.symmetric(horizontal: 0),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      title: Center(child: Text(aletDialogTextTitle)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+      content: Builder(
+        builder: (context) {
+          var width = MediaQuery.of(context).size.width * 0.9;
+
+          return Container(
+            //height: height,
+            width: width,
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                searchList![index].name!,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.grey[800],
+                  fontWeight: FontWeight.w900,
+                  fontStyle: FontStyle.italic,
+                  fontFamily: 'Open Sans',
+                ),
               ),
-              ElevatedButton(
-                child: Text(alertDialogAccept),
-                onPressed: () {
-                  autoKeybord = false;
-                  Navigator.of(context, rootNavigator: true).pop();
-                  pushToGoogleMaps(context, index);
-                },
-              )
-            ],
-          ),
+            ),
+          );
+        },
+      ),
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              child: Text(alertDialogCancel),
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Color(0xFF9e1200))),
+              onPressed: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            ElevatedButton(
+              child: Text(
+                alertDialogAccept,
+                style: TextStyle(),
+              ),
+              onPressed: () {
+                autoKeybord = false;
+                Navigator.of(context, rootNavigator: true).pop();
+                _openWithMapApp(context, index);
+              },
+            ),
+          ],
         ),
       ],
     );
