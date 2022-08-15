@@ -100,6 +100,7 @@ class _SearchPageViewState extends State<SearchPageView> {
   TextField _searchTextField() {
     return TextField(
       controller: textFieldController,
+      autofocus: true,
       decoration: InputDecoration(
         isDense: true,
         contentPadding: EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
