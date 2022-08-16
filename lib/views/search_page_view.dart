@@ -3,6 +3,7 @@ import 'package:kou_navigation_project/core/read_json_file.dart';
 import 'package:kou_navigation_project/models/json_data.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
 import 'package:kou_navigation_project/views/map_view.dart';
+import 'package:kou_navigation_project/theme/light_theme.dart';
 
 class SearchPageView extends StatefulWidget {
   SearchPageView({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class _SearchPageViewState extends State<SearchPageView> {
   static List<Locations>? locationList = [];
   static List<Locations>? searchList = [];
   var textFieldController = TextEditingController();
-  final String appBarTitleText = "ARAMA EKRANI";
+  final String appBarTitleText = "ARAMA";
   final String aletDialogTextTitle = "Seçilen Lokasyon";
   final String alertDialogAccept = "Konumu Göster";
   final String alertDialogCancel = "Seçimi İptal Et";
@@ -26,7 +27,7 @@ class _SearchPageViewState extends State<SearchPageView> {
   final double faildSearchsize = 20;
   final double projectBorderRadius = 20;
   final double listViewIconSize = 35;
-  bool autoKeybord = true;
+  final _lightColor = LightColor();
 
   getJsonList() async {
     locationList = await ReadJsonFile().readJson();
@@ -38,7 +39,6 @@ class _SearchPageViewState extends State<SearchPageView> {
   void initState() {
     super.initState();
     getJsonList();
-    autoKeybord = true;
   }
 
   @override
@@ -59,21 +59,18 @@ class _SearchPageViewState extends State<SearchPageView> {
                 padding: EdgeInsets.only(top: projectPadding / 2),
                 child: Center(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
                     children: [
                       Expanded(
                         flex: 1,
                         child: Container(
                           alignment: Alignment.center,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: projectPadding,
+                            ),
                             child: _searchTextField(),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: projectPadding / 2,
                       ),
                       locationList?.isEmpty == true
                           ? Center(child: CircularProgressIndicator())
@@ -131,26 +128,22 @@ class _SearchPageViewState extends State<SearchPageView> {
         return Card(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(projectBorderRadius / 2)),
-          color: Color(0xFF009e49),
+          color: _lightColor.kouGreen,
           child: ListTile(
             trailing: Icon(
               Icons.assistant_direction_rounded,
               size: listViewIconSize,
               color: Colors.white,
             ),
-            title: Text(
-              "${item.name}",
-              style: Theme.of(context).textTheme.headline6?.copyWith(
-                    color: Colors.white,
-                  ),
-            ),
+            title: Text("${item.name}",
+                style: Theme.of(context).textTheme.headline6?.copyWith(
+                      color: Colors.white,
+                    )),
             onTap: () {
               showDialog(
                 context: context,
                 builder: (_) => _aletDialog(index),
               );
-
-              //
             },
           ),
         );
@@ -168,13 +161,12 @@ class _SearchPageViewState extends State<SearchPageView> {
         return name.contains(input);
       }
     }).toList();
-
     setState(() {
       searchList = suggestion;
     });
   }
 
-  void _openWithMapApp(BuildContext context, int index) {
+  void _goMapScreen(BuildContext context, int index) {
     try {
       Navigator.push(
           context,
@@ -196,58 +188,61 @@ class _SearchPageViewState extends State<SearchPageView> {
       title: Center(child: Text(aletDialogTextTitle)),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
-      content: Builder(
-        builder: (context) {
-          var width = MediaQuery.of(context).size.width * 0.9;
+      content: _alertDialogBuilder(index),
+      actions: [_alertDialogActions(index)],
+    );
+  }
 
-          return Container(
-            //height: height,
-            width: width,
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Text(
-                searchList![index].name!,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.grey[800],
-                  fontWeight: FontWeight.w900,
-                  fontStyle: FontStyle.italic,
-                  fontFamily: 'Open Sans',
-                ),
+  Builder _alertDialogBuilder(int index) {
+    return Builder(
+      builder: (context) {
+        var width = MediaQuery.of(context).size.width * 0.9;
+        return Container(
+          width: width,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Text(
+              searchList![index].name!,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.grey[800],
+                fontWeight: FontWeight.w900,
+                fontStyle: FontStyle.italic,
+                fontFamily: 'Open Sans',
               ),
             ),
-          );
-        },
-      ),
-      actions: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              child: Text(alertDialogCancel),
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Color(0xFF9e1200))),
-              onPressed: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-                Navigator.of(context, rootNavigator: true).pop();
-              },
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            ElevatedButton(
-              child: Text(
-                alertDialogAccept,
-                style: TextStyle(),
-              ),
-              onPressed: () {
-                autoKeybord = false;
-                Navigator.of(context, rootNavigator: true).pop();
-                _openWithMapApp(context, index);
-              },
-            ),
-          ],
+          ),
+        );
+      },
+    );
+  }
+
+  Row _alertDialogActions(int index) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        ElevatedButton(
+          child: Text(alertDialogCancel),
+          style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.all<Color>(_lightColor.cancelRed)),
+          onPressed: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+            Navigator.of(context, rootNavigator: true).pop();
+          },
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        ElevatedButton(
+          child: Text(
+            alertDialogAccept,
+            style: TextStyle(),
+          ),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop();
+            _goMapScreen(context, index);
+          },
         ),
       ],
     );

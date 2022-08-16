@@ -4,7 +4,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kou_navigation_project/constant.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
-import 'package:kou_navigation_project/core/routing_googleMap_app.dart';
+import 'package:kou_navigation_project/core/routing_googlemap_app.dart';
 import 'package:location/location.dart';
 
 // ignore: must_be_immutable
@@ -34,7 +34,7 @@ class MapViewState extends State<MapView> {
   final double circularProgressIndicatorHeigt = 100;
   final double floatingActionButtonTextSize = 15;
   static bool locationPermission = true;
-  static bool agabuonemli = true;
+  static bool isLocationEnable = true;
 
   @override
   void initState() {
@@ -43,20 +43,44 @@ class MapViewState extends State<MapView> {
     _startingCameraLng = locationModel.lng!;
     getCurrentLocation();
     _goSelectedLocation(lat: locationModel.lat!, lng: locationModel.lng!);
-    locationTimer();
+    mapDrawTimer();
+  }
+
+  MapViewState(this.locationModel);
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+          title: Text(
+            "${locationModel.name}",
+            style: TextStyle(fontSize: appBarTitleSize),
+            maxLines: 3,
+            textAlign: TextAlign.center,
+          ),
+          centerTitle: true),
+      body: currentLocations == null
+          ? isLocationEnable == true
+              ? _circularProgress()
+              : _googleMapWidgetNoLine()
+          : _googleMapWidget(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButton: _floatingActionButtonGoMap(),
+    );
   }
 
   void _canRoadDraw() {
     if (currentLocations == null && locationPermission == false) {
       if (mounted) {
         setState(() {
-          agabuonemli = false;
+          isLocationEnable = false;
         });
       }
     }
   }
 
-  void locationTimer() {
+  void mapDrawTimer() {
     var counter = 4;
     Timer.periodic(const Duration(seconds: 1), (timer) {
       if (mounted) {
@@ -80,29 +104,6 @@ class MapViewState extends State<MapView> {
     });
   }
 
-  MapViewState(this.locationModel);
-
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: AppBar(
-          title: Text(
-            "${locationModel.name}",
-            style: TextStyle(fontSize: appBarTitleSize),
-            maxLines: 3,
-            textAlign: TextAlign.center,
-          ),
-          centerTitle: true),
-      body: currentLocations == null
-          ? agabuonemli == true
-              ? _circularProgress()
-              : SafeArea(child: _googleMapWidgetNoLine())
-          : SafeArea(child: _googleMapWidget()),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      floatingActionButton: _floatingActionButtonGoMap(),
-    );
-  }
-
   void getCurrentLocation() {
     Location location = Location();
     location.getLocation().then((location) {
@@ -111,19 +112,6 @@ class MapViewState extends State<MapView> {
         setState(() {});
       }
     });
-
-    /*
-    try {
-      location.onLocationChanged.listen((newLoc) {
-        currentLocations = newLoc;
-        if (mounted) {
-          setState(() {});
-        }
-      });
-    } on Exception catch (_) {
-      print('Konuma ulaşılamadı');
-    }
-*/
   }
 
   static final CameraPosition _statringLocation = CameraPosition(
@@ -140,7 +128,6 @@ class MapViewState extends State<MapView> {
       travelMode: TravelMode.walking,
     );
 
-    //print(result);
     if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) =>
           polylineCoordinates.add(LatLng(point.latitude, point.longitude)));
@@ -219,13 +206,6 @@ class MapViewState extends State<MapView> {
         _controller.complete(controller);
       },
       markers: _createMarker(),
-      polylines: {
-        Polyline(
-            polylineId: PolylineId("Yol"),
-            points: polylineCoordinates,
-            color: Colors.red,
-            width: 5),
-      },
     );
   }
 

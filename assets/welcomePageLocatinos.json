@@ -1,0 +1,64 @@
+{
+  "Locations": [
+    {
+      "Id": "1",
+      "Name": "İletişim Fakültesi ",
+      "Lat": 40.822925,
+      "Lng": 29.923182
+    },
+    {
+      "Id": "3",
+      "Name": "Eğitim Fakültesi",
+      "Lat": 40.821939,
+      "Lng": 29.924422
+    },
+    {
+      "Id": "5",
+      "Name": "Mühendislik Fakültesi A Kapısı",
+      "Lat": 40.820709,
+      "Lng": 29.922098
+    },
+    {
+      "Id": "8",
+      "Name": "Mühendislik Fakültesi B Kapısı",
+      "Lat": 40.821870,
+      "Lng": 29.923585
+    },
+    {
+      "Id": "6",
+      "Name": "Fen Edebiyat Fakültesi A Blok ",
+      "Lat": 40.820983,
+      "Lng": 29.920250
+    },
+    {
+      "Id": "7",
+      "Name": "Fen Edebİyat Fakültesi B Blok ",
+      "Lat": 40.822129,
+      "Lng": 29.926102
+    },
+    {
+      "Id": "2",
+      "Name": "İktisadi Ve İdari Bilimler Fakültesi",
+      "Lat": 40.822373,
+      "Lng": 29.923929
+    },
+    {
+      "Id": "4",
+      "Name": "Hukuk Fakültesi",
+      "Lat": 40.821768,
+      "Lng": 29.926135
+    },
+    {
+      "Id": "36",
+      "Name": "İlahiyat Fakültesi",
+      "Lat": 40.812755,
+      "Lng": 29.920893
+    },
+    {
+      "Id": "16",
+      "Name": "Teknoloji Fakültesi",
+      "Lat": 40.821612,
+      "Lng": 29.920167
+    }
+  ]
+}

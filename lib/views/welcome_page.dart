@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:kou_navigation_project/core/read_json_file.dart';
+import 'package:kou_navigation_project/models/json_data.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
 import 'package:kou_navigation_project/models/welcome_page_models.dart';
+import 'package:kou_navigation_project/theme/light_theme.dart';
 import 'package:kou_navigation_project/views/map_view.dart';
 import 'package:kou_navigation_project/views/search_page_view.dart';
 import 'package:location/location.dart';
@@ -27,6 +30,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   final double projectPadding = 20;
   final double sizedBoxHeight = 20;
   final double buttonSize = 90;
+  final _lightColor = LightColor();
   void getCurrentLocation() {
     Location location = Location();
     location.getLocation().then((location) {});
@@ -36,50 +40,34 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   void initState() {
     super.initState();
     getCurrentLocation();
+
+    getJsonList();
+  }
+
+  static List<Locations>? locationList = [];
+  List<LocationModels> modelList = [];
+  getJsonList() async {
+    locationList = await ReadJsonFile()
+        .readJsonWithPath("assets/welcomePageLocatinos.json");
+    modelList = listToModel(locationList!);
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Image.asset(kouLogoPath),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.qr_code,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              // do something
-            },
-          )
-        ],
-        title: Text(
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          appBarTitleText,
-          style: TextStyle(
-            fontSize: (MediaQuery.of(context).size.width - 50) /
-                (appBarTitleText.length - 10),
-          ),
-        ),
-        centerTitle: true,
-      ),
+      resizeToAvoidBottomInset: false,
+      appBar: _customAppBar(context),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: projectPadding / 2),
+          padding: EdgeInsets.symmetric(horizontal: 20),
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
                   flex: 1,
                   child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: projectPadding, vertical: projectPadding),
+                    padding: EdgeInsets.symmetric(vertical: projectPadding),
                     child: Container(
                       width: double.infinity,
                       child: _searchButton(),
@@ -89,40 +77,36 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                 Expanded(
                   flex: 5,
                   child: ListView(children: [
-                    Column(
-                      children: [
-                        _doubleElevatedButton(
-                            firstLocation: girisSayfasiModelleri[
-                                LocationNames.Yemekhane.index],
-                            secondLocation: girisSayfasiModelleri[
-                                LocationNames.OgrenciIsleri.index]),
-                        SizedBox(height: 10),
-                        _doubleElevatedButton(
-                            firstLocation: girisSayfasiModelleri[
-                                LocationNames.Kutuphane.index],
-                            secondLocation: girisSayfasiModelleri[
-                                LocationNames.HukukFakultesi.index]),
-                        SizedBox(height: 10),
-                        _doubleElevatedButton(
-                            firstLocation: girisSayfasiModelleri[
-                                LocationNames.Rektorluk.index],
-                            secondLocation: girisSayfasiModelleri[
-                                LocationNames.KongreMerkezi.index]),
-                        SizedBox(height: 10),
-                        _doubleElevatedButton(
-                            firstLocation: girisSayfasiModelleri[
-                                LocationNames.MuhendislikFakultesi.index],
-                            secondLocation: girisSayfasiModelleri[
-                                LocationNames.IlahiyatFakultesi.index]),
-                        SizedBox(height: 10),
-                        _doubleElevatedButton(
-                          firstLocation:
-                              girisSayfasiModelleri[LocationNames.Mediko.index],
-                          secondLocation:
-                              girisSayfasiModelleri[LocationNames.Golet.index],
-                        ),
-                      ],
-                    ),
+                    modelList.isEmpty == true
+                        ? Text("")
+                        : Column(
+                            children: [
+                              _doubleElevatedButton(
+                                firstLocation: modelList[0],
+                                secondLocation: modelList[1],
+                              ),
+                              SizedBox(height: 10),
+                              _doubleElevatedButton(
+                                firstLocation: modelList[2],
+                                secondLocation: modelList[3],
+                              ),
+                              SizedBox(height: 10),
+                              _doubleElevatedButton(
+                                firstLocation: modelList[4],
+                                secondLocation: modelList[5],
+                              ),
+                              SizedBox(height: 10),
+                              _doubleElevatedButton(
+                                firstLocation: modelList[6],
+                                secondLocation: modelList[7],
+                              ),
+                              SizedBox(height: 10),
+                              _doubleElevatedButton(
+                                firstLocation: modelList[8],
+                                secondLocation: modelList[9],
+                              ),
+                            ],
+                          ),
                   ]),
                 ),
               ],
@@ -130,6 +114,48 @@ class _WelcomePageViewState extends State<WelcomePageView> {
           ),
         ),
       ),
+    );
+  }
+
+  List<LocationModels> listToModel(List<Locations> locationList) {
+    List<LocationModels> models = [];
+
+    for (var element in locationList) {
+      LocationModels model = LocationModels();
+      model.name = element.name;
+      model.lat = element.lat;
+      model.lng = element.lng;
+      models.add(model);
+    }
+
+    return models;
+  }
+
+  AppBar _customAppBar(BuildContext context) {
+    return AppBar(
+      leading: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Image.asset(kouLogoPath),
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(
+            Icons.qr_code,
+            color: Colors.white,
+          ),
+          onPressed: () {},
+        )
+      ],
+      title: Text(
+        textAlign: TextAlign.center,
+        maxLines: 2,
+        appBarTitleText,
+        style: TextStyle(
+          fontSize: (MediaQuery.of(context).size.width - 50) /
+              (appBarTitleText.length - 10),
+        ),
+      ),
+      centerTitle: true,
     );
   }
 
@@ -164,16 +190,16 @@ class _WelcomePageViewState extends State<WelcomePageView> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _shortcutElevatedButton(firstLocation),
+        _customElevatedButton(firstLocation),
         SizedBox(
           width: 15,
         ),
-        _shortcutElevatedButton(secondLocation),
+        _customElevatedButton(secondLocation),
       ],
     );
   }
 
-  ElevatedButton _shortcutElevatedButton(LocationModels location) {
+  ElevatedButton _customElevatedButton(LocationModels location) {
     return ElevatedButton(
       style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -188,7 +214,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
       },
       child: Container(
         width: (MediaQuery.of(context).size.width / 2) - 70,
-        height: buttonSize,
+        height: MediaQuery.of(context).size.width / 4,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Center(
@@ -196,7 +222,6 @@ class _WelcomePageViewState extends State<WelcomePageView> {
               location.name!,
               maxLines: 3,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 15),
             ),
           ),
         ),
@@ -211,63 +236,69 @@ class _WelcomePageViewState extends State<WelcomePageView> {
       clipBehavior: Clip.antiAliasWithSaveLayer,
       title: Center(child: Text(aletDialogTextTitle)),
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0))),
-      content: Builder(
-        builder: (context) {
-          var width = MediaQuery.of(context).size.width * 0.9;
+          borderRadius: BorderRadius.all(
+        Radius.circular(10.0),
+      )),
+      content: _alertDialogBuilder(location),
+      actions: [_alertDialogActions(location)],
+    );
+  }
 
-          return Container(
-            //height: height,
-            width: width,
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Text(
-                location.name!,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.grey[800],
-                  fontWeight: FontWeight.w900,
-                  fontStyle: FontStyle.italic,
-                  fontFamily: 'Open Sans',
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-      actions: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              child: Text(alertDialogCancel),
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Color(0xFF9e1200))),
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).pop();
-              },
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            ElevatedButton(
-              child: Text(
-                alertDialogAccept,
-                style: TextStyle(),
-              ),
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            MapView(locationModel: location)));
-              },
-            ),
-          ],
+  Row _alertDialogActions(LocationModels location) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        ElevatedButton(
+          child: Text(alertDialogCancel),
+          style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.all<Color>(_lightColor.cancelRed)),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop();
+          },
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        ElevatedButton(
+          child: Text(
+            alertDialogAccept,
+            style: TextStyle(),
+          ),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop();
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MapView(locationModel: location)));
+          },
         ),
       ],
+    );
+  }
+
+  Builder _alertDialogBuilder(LocationModels location) {
+    return Builder(
+      builder: (context) {
+        var width = MediaQuery.of(context).size.width * 0.9;
+        return Container(
+          //height: height,
+          width: width,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Text(
+              location.name!,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.grey[800],
+                fontWeight: FontWeight.w900,
+                fontStyle: FontStyle.italic,
+                fontFamily: 'Open Sans',
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

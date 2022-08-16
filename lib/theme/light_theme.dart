@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
 class LighTheme {
-  final _lightColor = _LightColor();
+  final _lightColor = LightColor();
 
   late ThemeData theme;
 
   LighTheme() {
     theme = ThemeData(
       appBarTheme: const AppBarTheme(
-        // color: Colors.amber,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(20),
@@ -32,9 +31,11 @@ class LighTheme {
   }
 }
 
-class _LightColor {
+class LightColor {
   final Color _textColor = Color.fromARGB(255, 0, 0, 0);
   final Color blueMenia = const Color.fromARGB(95, 188, 248, 1);
+  var kouGreen = Color(0xFF009e49);
+  var cancelRed = Color(0xFF9e1200);
   //static Color kouGreen = const Color(0xFF0aa351);
   //0xFF009e49
   //0xFFcdb866
