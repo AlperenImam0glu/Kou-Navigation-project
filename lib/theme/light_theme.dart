@@ -24,6 +24,7 @@ class LighTheme {
       colorScheme: const ColorScheme.light(
         primary: Color(0xFF009e49),
       ),
+      drawerTheme: DrawerThemeData(),
       textTheme: ThemeData.light().textTheme.copyWith(
             subtitle1: TextStyle(fontSize: 25, color: _lightColor._textColor),
           ),
@@ -36,7 +37,6 @@ class LightColor {
   final Color blueMenia = const Color.fromARGB(95, 188, 248, 1);
   var kouGreen = Color(0xFF009e49);
   var cancelRed = Color(0xFF9e1200);
-  //static Color kouGreen = const Color(0xFF0aa351);
   //0xFF009e49
   //0xFFcdb866
   //0xFF231f20

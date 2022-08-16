@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: LighTheme().theme,
-      title: 'Flutter Google Maps',
+      title: 'Kocaeli Üniversitesi Lokasyonlar',
       home: WelcomePageView(),
     );
   }

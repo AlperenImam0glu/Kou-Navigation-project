@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kou_navigation_project/core/read_json_file.dart';
 import 'package:kou_navigation_project/models/json_data.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
-import 'package:kou_navigation_project/models/welcome_page_models.dart';
 import 'package:kou_navigation_project/theme/light_theme.dart';
 import 'package:kou_navigation_project/views/map_view.dart';
 import 'package:kou_navigation_project/views/search_page_view.dart';
@@ -16,21 +15,18 @@ class WelcomePageView extends StatefulWidget {
 }
 
 class _WelcomePageViewState extends State<WelcomePageView> {
-  static List<LocationModels> girisSayfasiModelleri =
-      WelcomePageModels().models();
-
   final textFieldController = TextEditingController();
-
   final String appBarTitleText = "KOCAELİ ÜNİVERSİTESİ LOKASYONLARI";
   final String searchButtonText = "ARAMA YAPMAK İÇİN DOKUNUN";
   final String aletDialogTextTitle = "Seçilen Lokasyon";
   final String alertDialogAccept = "Konumu Göster";
   final String alertDialogCancel = "Seçimi İptal Et";
-  final String kouLogoPath = "assets/icons/kou_logo.png";
+  final String kouLogoPath = "assets/icons/kou_pin_logo.png";
   final double projectPadding = 20;
   final double sizedBoxHeight = 20;
   final double buttonSize = 90;
   final _lightColor = LightColor();
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   void getCurrentLocation() {
     Location location = Location();
     location.getLocation().then((location) {});
@@ -48,7 +44,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   List<LocationModels> modelList = [];
   getJsonList() async {
     locationList = await ReadJsonFile()
-        .readJsonWithPath("assets/welcomePageLocatinos.json");
+        .readJsonWithPath("assets/json/welcomePageLocatinos.json");
     modelList = listToModel(locationList!);
     setState(() {});
   }
@@ -56,6 +52,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       resizeToAvoidBottomInset: false,
       appBar: _customAppBar(context),
       body: SafeArea(
@@ -114,6 +111,80 @@ class _WelcomePageViewState extends State<WelcomePageView> {
           ),
         ),
       ),
+      drawer: Drawer(
+        width: MediaQuery.of(context).size.width * 0.7,
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(color: _lightColor.kouGreen),
+              child: Center(child: Image.asset(kouLogoPath)),
+            ),
+            Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ListTile(
+                    leading: SizedBox(
+                        height: MediaQuery.of(context).size.width / 10,
+                        child: Image.asset(
+                          "assets/icons/chrome.png",
+                        )),
+                    title: Text('Web site',
+                        style: Theme.of(context).textTheme.subtitle2),
+                    onTap: () {},
+                  ),
+                  SizedBox(
+                    height: sizedBoxHeight,
+                  ),
+                  ListTile(
+                    leading: SizedBox(
+                        height: MediaQuery.of(context).size.width / 10,
+                        child: Image.asset("assets/icons/instagram.png")),
+                    title: Text("Instagram",
+                        style: Theme.of(context).textTheme.subtitle2),
+                    onTap: () {},
+                  ),
+                  SizedBox(
+                    height: sizedBoxHeight,
+                  ),
+                  ListTile(
+                    leading: SizedBox(
+                        height: MediaQuery.of(context).size.width / 10,
+                        child: Image.asset("assets/icons/facebook.png")),
+                    title: Text("Facebook",
+                        style: Theme.of(context).textTheme.subtitle2),
+                    onTap: () {},
+                  ),
+                  SizedBox(
+                    height: sizedBoxHeight,
+                  ),
+                  ListTile(
+                    leading: SizedBox(
+                        height: MediaQuery.of(context).size.width / 10,
+                        child: Image.asset("assets/icons/twitter.png")),
+                    title: Text("Twitter",
+                        style: Theme.of(context).textTheme.subtitle2),
+                    onTap: () {},
+                  ),
+                  SizedBox(
+                    height: sizedBoxHeight,
+                  ),
+                  ListTile(
+                    leading: SizedBox(
+                        height: MediaQuery.of(context).size.width / 10,
+                        child: Image.asset("assets/icons/youtube.png")),
+                    title: Text("Youtube",
+                        style: Theme.of(context).textTheme.subtitle2),
+                    onTap: () {},
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -133,9 +204,17 @@ class _WelcomePageViewState extends State<WelcomePageView> {
 
   AppBar _customAppBar(BuildContext context) {
     return AppBar(
-      leading: Padding(
+      /*leading: Padding(
         padding: const EdgeInsets.all(5.0),
         child: Image.asset(kouLogoPath),
+      ),*/
+      leading: IconButton(
+        icon: Image.asset(
+          kouLogoPath,
+        ),
+        onPressed: () {
+          scaffoldKey.currentState?.openDrawer();
+        },
       ),
       actions: [
         IconButton(
@@ -301,17 +380,4 @@ class _WelcomePageViewState extends State<WelcomePageView> {
       },
     );
   }
-}
-
-enum LocationNames {
-  Yemekhane,
-  OgrenciIsleri,
-  MuhendislikFakultesi,
-  HukukFakultesi,
-  Kutuphane,
-  Rektorluk,
-  KongreMerkezi,
-  Mediko,
-  Golet,
-  IlahiyatFakultesi
 }

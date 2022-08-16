@@ -27,6 +27,7 @@ class _SearchPageViewState extends State<SearchPageView> {
   final double faildSearchsize = 20;
   final double projectBorderRadius = 20;
   final double listViewIconSize = 35;
+  bool focus = true;
   final _lightColor = LightColor();
 
   getJsonList() async {
@@ -97,7 +98,7 @@ class _SearchPageViewState extends State<SearchPageView> {
   TextField _searchTextField() {
     return TextField(
       controller: textFieldController,
-      autofocus: true,
+      autofocus: focus,
       decoration: InputDecoration(
         isDense: true,
         contentPadding: EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
@@ -140,6 +141,7 @@ class _SearchPageViewState extends State<SearchPageView> {
                       color: Colors.white,
                     )),
             onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
               showDialog(
                 context: context,
                 builder: (_) => _aletDialog(index),

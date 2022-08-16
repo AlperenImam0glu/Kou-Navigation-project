@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:kou_navigation_project/models/json_data.dart';
 
 class ReadJsonFile {
-  String filePath = "assets/locations.json";
+  String filePath = "assets/json/locations.json";
   Future readJson() async {
     final String response = await rootBundle.loadString(filePath);
     final data = await json.decode(response);
