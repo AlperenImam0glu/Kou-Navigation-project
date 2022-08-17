@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kou_navigation_project/core/open_url.dart';
 import 'package:kou_navigation_project/core/read_json_file.dart';
 import 'package:kou_navigation_project/models/json_data.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
@@ -133,7 +134,9 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                         )),
                     title: Text('Web site',
                         style: Theme.of(context).textTheme.subtitle2),
-                    onTap: () {},
+                    onTap: () {
+                      OpenUrl.openMap("https://www.kocaeli.edu.tr/");
+                    },
                   ),
                   SizedBox(
                     height: sizedBoxHeight,
@@ -144,7 +147,10 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                         child: Image.asset("assets/icons/instagram.png")),
                     title: Text("Instagram",
                         style: Theme.of(context).textTheme.subtitle2),
-                    onTap: () {},
+                    onTap: () {
+                      OpenUrl.openMap(
+                          "https://www.instagram.com/kou92official/");
+                    },
                   ),
                   SizedBox(
                     height: sizedBoxHeight,
@@ -155,7 +161,10 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                         child: Image.asset("assets/icons/facebook.png")),
                     title: Text("Facebook",
                         style: Theme.of(context).textTheme.subtitle2),
-                    onTap: () {},
+                    onTap: () {
+                      OpenUrl.openMap(
+                          "https://www.facebook.com/kou92official/");
+                    },
                   ),
                   SizedBox(
                     height: sizedBoxHeight,
@@ -166,7 +175,9 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                         child: Image.asset("assets/icons/twitter.png")),
                     title: Text("Twitter",
                         style: Theme.of(context).textTheme.subtitle2),
-                    onTap: () {},
+                    onTap: () {
+                      OpenUrl.openMap("https://twitter.com/kou92official");
+                    },
                   ),
                   SizedBox(
                     height: sizedBoxHeight,
@@ -177,7 +188,10 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                         child: Image.asset("assets/icons/youtube.png")),
                     title: Text("Youtube",
                         style: Theme.of(context).textTheme.subtitle2),
-                    onTap: () {},
+                    onTap: () {
+                      OpenUrl.openMap(
+                          "https://www.youtube.com/c/kocaeli%C3%BCniversitesi");
+                    },
                   ),
                 ],
               ),
