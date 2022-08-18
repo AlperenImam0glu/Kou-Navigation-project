@@ -5,6 +5,7 @@ import 'package:kou_navigation_project/models/json_data.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
 import 'package:kou_navigation_project/theme/light_theme.dart';
 import 'package:kou_navigation_project/views/map_view.dart';
+import 'package:kou_navigation_project/views/qr_scanner.dart';
 import 'package:kou_navigation_project/views/search_page_view.dart';
 import 'package:location/location.dart';
 
@@ -236,7 +237,11 @@ class _WelcomePageViewState extends State<WelcomePageView> {
             Icons.qr_code,
             color: Colors.white,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const QRViewExample(),
+            ));
+          },
         )
       ],
       title: Text(

@@ -1,6 +1,6 @@
-import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -49,76 +49,42 @@ class _QRViewExampleState extends State<QRViewExample> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    cameraRefreshTimer();
-  }
-
-  void cameraRefreshTimer() {
-    var counter = 1;
-    Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      if (counter == 0) {
-        refreshCamera();
-        timer.cancel();
-      }
-      counter--;
-    });
-  }
-
-  void refreshCamera() async {
-    await controller?.pauseCamera();
-    await controller?.resumeCamera();
-  }
-
-  String appBarTitleText = "QR KOD OKUYUCU";
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          appBarTitleText,
-          style: TextStyle(
-            fontSize: (MediaQuery.of(context).size.width - 50) /
-                (appBarTitleText.length + 10),
-          ),
-        ),
-      ),
       body: Column(
         children: <Widget>[
+          Expanded(child: _buildQrView(context)),
           Expanded(
-            child: _buildQrView(context),
-          ),
-          result != null ? Text("data") : Text("result.toString()"),
+            flex: 1,
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  if (result != null)
+                    Text(
+                        'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
+                  else
+                    const Text('Scan a code'),
+                ],
+              ),
+            ),
+          )
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await controller?.toggleFlash();
-          changeFlash();
           setState(() {});
         },
         child: FutureBuilder(
+          future: controller?.getFlashStatus(),
           builder: (context, snapshot) {
-            return isFlashOpen
-                ? Icon(
-                    Icons.flash_off,
-                    color: Colors.white,
-                  )
-                : Icon(Icons.flash_on, color: Colors.white);
+            return Icon(Icons.flash_on);
           },
         ),
       ),
     );
-  }
-
-  bool isFlashOpen = false;
-
-  void changeFlash() {
-    isFlashOpen = !isFlashOpen;
   }
 
   Widget _buildQrView(BuildContext context) {
