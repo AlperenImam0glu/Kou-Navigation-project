@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:kou_navigation_project/core/open_url.dart';
+import 'package:kou_navigation_project/theme/light_theme.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 void main() => runApp(const MaterialApp(home: MyHome()));
@@ -92,7 +94,6 @@ class _QRViewExampleState extends State<QRViewExample> {
           Expanded(
             child: _buildQrView(context),
           ),
-          result != null ? Text("data") : Text("result.toString()"),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -144,11 +145,94 @@ class _QRViewExampleState extends State<QRViewExample> {
     setState(() {
       this.controller = controller;
     });
+
     controller.scannedDataStream.listen((scanData) {
+      if (result != null) {
+        if (alert) {
+          showDialogs();
+        }
+      }
       setState(() {
         result = scanData;
       });
     });
+  }
+
+  bool alert = true;
+  void showDialogs() {
+    alert = false;
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) => AlertDialog(
+        insetPadding: EdgeInsets.symmetric(horizontal: 0),
+        contentPadding: EdgeInsets.symmetric(horizontal: 0),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        title: Center(child: Text("AÇILACAK BAĞLANTI")),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10.0),
+          ),
+        ),
+        content: Builder(
+          builder: (context) {
+            var width = MediaQuery.of(context).size.width * 0.9;
+            return Container(
+              //height: height,
+              width: width,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  result!.code!,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.grey[800],
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                    fontStyle: FontStyle.italic,
+                    fontFamily: 'Open Sans',
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+        actions: [_alertDialogActions()],
+      ),
+    );
+  }
+
+  final _lightColor = LightColor();
+  Row _alertDialogActions() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        ElevatedButton(
+          child: Text("İptal Et"),
+          style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.all<Color>(_lightColor.cancelRed)),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop();
+            alert = true;
+          },
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        ElevatedButton(
+          child: Text(
+            "Bağlantıyı Aç",
+            style: TextStyle(),
+          ),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop();
+            alert = true;
+            OpenUrl.openMap(result!.code!);
+          },
+        ),
+      ],
+    );
   }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
