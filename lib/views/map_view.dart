@@ -119,34 +119,7 @@ class MapViewState extends State<MapView> {
 
       ValueNotifier<RoadType> notifierRoadType = ValueNotifier(RoadType.car);
 
-      final bottomPersistant = scaffoldKey.currentState!.showBottomSheet(
-        (ctx) {
-          return RoadTypeChoiceWidget(
-            setValueCallback: (roadType) {
-              notifierRoadType.value = roadType;
-            },
-          );
-        },
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-      );
-      await bottomPersistant.closed.then((roadType) async {
-        RoadInfo roadInformation = await mapController.drawRoad(
-          point, point2,
-          roadType: notifierRoadType.value,
-          //interestPoints: [pointM1, pointM2],
-          roadOption: RoadOption(
-            roadWidth: 10,
-            roadColor: Colors.blue,
-            showMarkerOfPOI: true,
-            zoomInto: true,
-          ),
-        );
-        print(
-            "duration:${Duration(seconds: roadInformation.duration!.toInt()).inMinutes}");
-        print("distance:${roadInformation.distance}Km");
-        print(roadInformation.route.length);
-      });
+      ;
     } on RoadException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kou_navigation_project/osm_example/home_example.dart';
 import 'package:kou_navigation_project/theme/light_theme.dart';
 import 'package:kou_navigation_project/views/welcome_page.dart';
 
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: LighTheme().theme,
       title: 'Kocaeli Üniversitesi Lokasyonlar',
-      home: WelcomePageView(),
+      home: Hesap(),
     );
   }
 }
