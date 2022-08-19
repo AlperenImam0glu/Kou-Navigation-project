@@ -164,40 +164,46 @@ class _QRViewExampleState extends State<QRViewExample> {
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (_) => AlertDialog(
-        insetPadding: EdgeInsets.symmetric(horizontal: 0),
-        contentPadding: EdgeInsets.symmetric(horizontal: 0),
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        title: Center(child: Text("AÇILACAK BAĞLANTI")),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10.0),
+      builder: (_) => WillPopScope(
+        onWillPop: () async {
+          alert = true;
+          return true;
+        },
+        child: AlertDialog(
+          insetPadding: EdgeInsets.symmetric(horizontal: 0),
+          contentPadding: EdgeInsets.symmetric(horizontal: 0),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          title: Center(child: Text("OKUNAN BAĞLANTI")),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
           ),
-        ),
-        content: Builder(
-          builder: (context) {
-            var width = MediaQuery.of(context).size.width * 0.9;
-            return Container(
-              //height: height,
-              width: width,
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Text(
-                  result!.code!,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.grey[800],
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900,
-                    fontStyle: FontStyle.italic,
-                    fontFamily: 'Open Sans',
+          content: Builder(
+            builder: (context) {
+              var width = MediaQuery.of(context).size.width * 0.9;
+              return Container(
+                //height: height,
+                width: width,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    result!.code!,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.grey[800],
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      fontStyle: FontStyle.italic,
+                      fontFamily: 'Open Sans',
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
+          actions: [_alertDialogActions()],
         ),
-        actions: [_alertDialogActions()],
       ),
     );
   }
