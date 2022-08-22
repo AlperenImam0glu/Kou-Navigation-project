@@ -4,6 +4,7 @@ import 'package:kou_navigation_project/models/json_data.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
 import 'package:kou_navigation_project/views/map_view.dart';
 import 'package:kou_navigation_project/theme/light_theme.dart';
+import 'package:kou_navigation_project/widgets/custom_alert_dialog_widget.dart';
 
 class SearchPageView extends StatefulWidget {
   SearchPageView({Key? key}) : super(key: key);
@@ -69,7 +70,7 @@ class _SearchPageViewState extends State<SearchPageView> {
                             padding: EdgeInsets.symmetric(
                               horizontal: projectPadding,
                             ),
-                            child: _searchTextField(),
+                            child: searchTextField(),
                           ),
                         ),
                       ),
@@ -85,7 +86,7 @@ class _SearchPageViewState extends State<SearchPageView> {
                                   : Padding(
                                       padding: EdgeInsets.symmetric(
                                           horizontal: projectPadding + 5),
-                                      child: _customListView()),
+                                      child: customListView()),
                             ),
                     ],
                   ),
@@ -95,7 +96,7 @@ class _SearchPageViewState extends State<SearchPageView> {
     );
   }
 
-  TextField _searchTextField() {
+  TextField searchTextField() {
     return TextField(
       controller: textFieldController,
       autofocus: focus,
@@ -121,7 +122,7 @@ class _SearchPageViewState extends State<SearchPageView> {
     );
   }
 
-  ListView _customListView() {
+  ListView customListView() {
     return ListView.builder(
       itemCount: searchList!.length,
       itemBuilder: (context, index) {
@@ -144,7 +145,13 @@ class _SearchPageViewState extends State<SearchPageView> {
               FocusManager.instance.primaryFocus?.unfocus();
               showDialog(
                 context: context,
-                builder: (_) => _aletDialog(index),
+                builder: (_) => CustomAlertDialog(
+                  location: LocationModels(
+                      name: locationList![index].name,
+                      lat: locationList![index].lat,
+                      lng: locationList![index].lng),
+                  context: context,
+                ),
               );
             },
           ),
@@ -166,87 +173,5 @@ class _SearchPageViewState extends State<SearchPageView> {
     setState(() {
       searchList = suggestion;
     });
-  }
-
-  void _goMapScreen(BuildContext context, int index) {
-    try {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MapView(
-                      locationModel: LocationModels(
-                    name: searchList![index].name,
-                    lat: searchList![index].lat,
-                    lng: searchList![index].lng,
-                  ))));
-    } catch (e) {}
-  }
-
-  AlertDialog _aletDialog(int index) {
-    return AlertDialog(
-      insetPadding: EdgeInsets.symmetric(horizontal: 0),
-      contentPadding: EdgeInsets.symmetric(horizontal: 0),
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      title: Center(child: Text(aletDialogTextTitle)),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0))),
-      content: _alertDialogBuilder(index),
-      actions: [_alertDialogActions(index)],
-    );
-  }
-
-  Builder _alertDialogBuilder(int index) {
-    return Builder(
-      builder: (context) {
-        var width = MediaQuery.of(context).size.width * 0.9;
-        return Container(
-          width: width,
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Text(
-              searchList![index].name!,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.grey[800],
-                fontWeight: FontWeight.w900,
-                fontStyle: FontStyle.italic,
-                fontFamily: 'Open Sans',
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Row _alertDialogActions(int index) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        ElevatedButton(
-          child: Text(alertDialogCancel),
-          style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(_lightColor.cancelRed)),
-          onPressed: () {
-            FocusManager.instance.primaryFocus?.unfocus();
-            Navigator.of(context, rootNavigator: true).pop();
-          },
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        ElevatedButton(
-          child: Text(
-            alertDialogAccept,
-            style: TextStyle(),
-          ),
-          onPressed: () {
-            Navigator.of(context, rootNavigator: true).pop();
-            _goMapScreen(context, index);
-          },
-        ),
-      ],
-    );
   }
 }

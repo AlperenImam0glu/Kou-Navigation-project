@@ -329,6 +329,18 @@
       "Name": "Bankamatikler ",
       "Lat": 40.823861,
       "Lng": 29.921296
+    },
+    {
+      "Id": "56",
+      "Name": "Öğrenci İşleri",
+      "Lat": 40.821468,
+      "Lng": 29.928602
+    },
+    {
+      "Id": "57",
+      "Name": "Sosyal Bilimler Enstitüsü",
+      "Lat": 40.821334,
+      "Lng": 29.927808
     }
   ]
 }

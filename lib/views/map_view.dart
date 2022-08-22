@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kou_navigation_project/constant/constant.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
 import 'package:kou_navigation_project/core/routing_googlemap_app.dart';
+import 'package:kou_navigation_project/theme/light_theme.dart';
 import 'package:location/location.dart';
 
 // ignore: must_be_immutable
@@ -35,7 +36,7 @@ class MapViewState extends State<MapView> {
   final double floatingActionButtonTextSize = 15;
   static bool locationPermission = true;
   static bool isLocationEnable = true;
-
+  final _lightColor = LightColor();
   @override
   void initState() {
     super.initState();
@@ -53,6 +54,15 @@ class MapViewState extends State<MapView> {
     return new Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.circle,
+                color: _lightColor.kouGreen,
+              ),
+              onPressed: () {},
+            )
+          ],
           title: Text(
             "${locationModel.name}",
             style: TextStyle(fontSize: appBarTitleSize),

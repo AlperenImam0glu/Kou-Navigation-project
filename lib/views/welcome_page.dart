@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:kou_navigation_project/core/read_json_file.dart';
 import 'package:kou_navigation_project/models/json_data.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
 import 'package:kou_navigation_project/theme/light_theme.dart';
-import 'package:kou_navigation_project/views/map_view.dart';
 import 'package:kou_navigation_project/views/qr_scanner.dart';
 import 'package:kou_navigation_project/views/search_page_view.dart';
 import 'package:kou_navigation_project/widgets/custom_alert_dialog_widget.dart';
@@ -29,8 +29,8 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   final double projectPadding = 20;
   final double sizedBoxHeight = 20;
   final double buttonSize = 90;
-  final _lightColor = LightColor();
   var scaffoldKey = GlobalKey<ScaffoldState>();
+  bool networkConnection = false;
   void getCurrentLocation() {
     Location location = Location();
     location.getLocation().then((location) {});
@@ -41,6 +41,18 @@ class _WelcomePageViewState extends State<WelcomePageView> {
     super.initState();
     getCurrentLocation();
     getJsonList();
+    checkNetwork();
+  }
+
+  void checkNetwork() async {
+    bool result = await InternetConnectionChecker().hasConnection;
+    if (result == true) {
+      print('İnternet Bağlantısı var');
+      networkConnection = true;
+    } else {
+      print('No internet :( Reason:');
+      showDialogs();
+    }
   }
 
   static List<Locations>? locationList = [];
@@ -75,10 +87,11 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                 ),
                 Expanded(
                   flex: 5,
-                  child: ListView(children: [
-                    modelList.isEmpty == true
-                        ? Text("Yükleniyor..")
-                        : Column(
+                  child: modelList.isEmpty == true
+                      ? Container(
+                          width: 300, child: CircularProgressIndicator())
+                      : ListView(children: [
+                          Column(
                             children: [
                               _doubleElevatedButton(
                                 firstLocation: modelList[0],
@@ -106,7 +119,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                               ),
                             ],
                           ),
-                  ]),
+                        ]),
                 ),
               ],
             ),
@@ -240,76 +253,43 @@ class _WelcomePageViewState extends State<WelcomePageView> {
     );
   }
 
-  AlertDialog _aletDialog(LocationModels location) {
-    return AlertDialog(
-      insetPadding: EdgeInsets.symmetric(horizontal: 0),
-      contentPadding: EdgeInsets.symmetric(horizontal: 0),
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      title: Center(child: Text(aletDialogTextTitle)),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-        Radius.circular(10.0),
-      )),
-      content: _alertDialogBuilder(location),
-      actions: [_alertDialogActions(location)],
-    );
-  }
-
-  Row _alertDialogActions(LocationModels location) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        ElevatedButton(
-          child: Text(alertDialogCancel),
-          style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(_lightColor.cancelRed)),
-          onPressed: () {
-            Navigator.of(context, rootNavigator: true).pop();
-          },
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        ElevatedButton(
-          child: Text(
-            alertDialogAccept,
-            style: TextStyle(),
-          ),
-          onPressed: () {
-            Navigator.of(context, rootNavigator: true).pop();
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MapView(locationModel: location)));
-          },
-        ),
-      ],
-    );
-  }
-
-  Builder _alertDialogBuilder(LocationModels location) {
-    return Builder(
-      builder: (context) {
-        var width = MediaQuery.of(context).size.width * 0.9;
-        return Container(
-          //height: height,
-          width: width,
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Text(
-              location.name!,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.grey[800],
-                fontWeight: FontWeight.w900,
-                fontStyle: FontStyle.italic,
-                fontFamily: 'Open Sans',
-              ),
+  void showDialogs() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) => WillPopScope(
+        onWillPop: () async {
+          return true;
+        },
+        child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
             ),
           ),
-        );
-      },
+          content: Text(
+            "İNTERNET BAĞLANTINIZI KONTROL EDİNİZ",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.grey[800],
+              fontWeight: FontWeight.w900,
+              fontStyle: FontStyle.italic,
+              fontFamily: 'Open Sans',
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+                child: Center(
+                  child: Text(
+                    "Tamam",
+                  ),
+                ))
+          ],
+        ),
+      ),
     );
   }
 }

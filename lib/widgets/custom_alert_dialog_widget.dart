@@ -47,6 +47,20 @@ AlertDialog _aletDialog(LocationModels location, BuildContext context) {
   );
 }
 
+void goMapScreen(BuildContext context, LocationModels location) {
+  try {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MapView(
+                    locationModel: LocationModels(
+                  name: location.name,
+                  lat: location.lat,
+                  lng: location.lng,
+                ))));
+  } catch (e) {}
+}
+
 Row _alertDialogActions(LocationModels location, BuildContext context) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -70,10 +84,7 @@ Row _alertDialogActions(LocationModels location, BuildContext context) {
         ),
         onPressed: () {
           Navigator.of(context, rootNavigator: true).pop();
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MapView(locationModel: location)));
+          goMapScreen(context, location);
         },
       ),
     ],
