@@ -61,13 +61,16 @@ class MapViewState extends State<MapView> {
           ),
           centerTitle: true),
       body: currentLocations == null
-          ? isLocationEnable == true
-              ? _circularProgress()
-              : _googleMapWidgetNoLine()
+          ? _googleMapWidgetNoLine()
           : _googleMapWidget(),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: _floatingActionButtonGoMap(),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   void _canRoadDraw() {

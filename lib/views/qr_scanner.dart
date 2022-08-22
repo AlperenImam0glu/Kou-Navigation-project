@@ -6,40 +6,25 @@ import 'package:kou_navigation_project/core/open_url.dart';
 import 'package:kou_navigation_project/theme/light_theme.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-void main() => runApp(const MaterialApp(home: MyHome()));
-
-class MyHome extends StatelessWidget {
-  const MyHome({Key? key}) : super(key: key);
+class QRCodeScannerView extends StatefulWidget {
+  const QRCodeScannerView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Flutter Demo Home Page')),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const QRViewExample(),
-            ));
-          },
-          child: const Text('qrView'),
-        ),
-      ),
-    );
-  }
+  State<StatefulWidget> createState() => _QRCodeScannerViewState();
 }
 
-class QRViewExample extends StatefulWidget {
-  const QRViewExample({Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => _QRViewExampleState();
-}
-
-class _QRViewExampleState extends State<QRViewExample> {
+class _QRCodeScannerViewState extends State<QRCodeScannerView> {
+  final _lightColor = LightColor();
   Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  String appBarTitleText = "QR KOD OKUYUCU";
+  bool isFlashOpen = false;
+  bool alertState = true;
+
+  void changeFlashState() {
+    isFlashOpen = !isFlashOpen;
+  }
 
   @override
   void reassemble() {
@@ -53,10 +38,10 @@ class _QRViewExampleState extends State<QRViewExample> {
   @override
   void initState() {
     super.initState();
-    cameraRefreshTimer();
+    refreshingCamera();
   }
 
-  void cameraRefreshTimer() {
+  void refreshingCamera() {
     var counter = 1;
     Timer.periodic(const Duration(milliseconds: 500), (timer) {
       if (counter == 0) {
@@ -72,7 +57,6 @@ class _QRViewExampleState extends State<QRViewExample> {
     await controller?.resumeCamera();
   }
 
-  String appBarTitleText = "QR KOD OKUYUCU";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +83,7 @@ class _QRViewExampleState extends State<QRViewExample> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await controller?.toggleFlash();
-          changeFlash();
+          changeFlashState();
           setState(() {});
         },
         child: FutureBuilder(
@@ -114,12 +98,6 @@ class _QRViewExampleState extends State<QRViewExample> {
         ),
       ),
     );
-  }
-
-  bool isFlashOpen = false;
-
-  void changeFlash() {
-    isFlashOpen = !isFlashOpen;
   }
 
   Widget _buildQrView(BuildContext context) {
@@ -148,7 +126,7 @@ class _QRViewExampleState extends State<QRViewExample> {
 
     controller.scannedDataStream.listen((scanData) {
       if (result != null) {
-        if (alert) {
+        if (alertState) {
           showDialogs();
         }
       }
@@ -156,89 +134,6 @@ class _QRViewExampleState extends State<QRViewExample> {
         result = scanData;
       });
     });
-  }
-
-  bool alert = true;
-  void showDialogs() {
-    alert = false;
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (_) => WillPopScope(
-        onWillPop: () async {
-          alert = true;
-          return true;
-        },
-        child: AlertDialog(
-          insetPadding: EdgeInsets.symmetric(horizontal: 0),
-          contentPadding: EdgeInsets.symmetric(horizontal: 0),
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          title: Center(child: Text("OKUNAN BAĞLANTI")),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(10.0),
-            ),
-          ),
-          content: Builder(
-            builder: (context) {
-              var width = MediaQuery.of(context).size.width * 0.9;
-              return Container(
-                //height: height,
-                width: width,
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    result!.code!,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.grey[800],
-                      fontSize: 20,
-                      fontWeight: FontWeight.w900,
-                      fontStyle: FontStyle.italic,
-                      fontFamily: 'Open Sans',
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-          actions: [_alertDialogActions()],
-        ),
-      ),
-    );
-  }
-
-  final _lightColor = LightColor();
-  Row _alertDialogActions() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        ElevatedButton(
-          child: Text("İptal Et"),
-          style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(_lightColor.cancelRed)),
-          onPressed: () {
-            Navigator.of(context, rootNavigator: true).pop();
-            alert = true;
-          },
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        ElevatedButton(
-          child: Text(
-            "Bağlantıyı Aç",
-            style: TextStyle(),
-          ),
-          onPressed: () {
-            Navigator.of(context, rootNavigator: true).pop();
-            alert = true;
-            OpenUrl.openMap(result!.code!);
-          },
-        ),
-      ],
-    );
   }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
@@ -254,5 +149,90 @@ class _QRViewExampleState extends State<QRViewExample> {
   void dispose() {
     controller?.dispose();
     super.dispose();
+  }
+
+  void showDialogs() {
+    alertState = false;
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) => WillPopScope(
+        onWillPop: () async {
+          alertState = true;
+          return true;
+        },
+        child: AlertDialog(
+          insetPadding: EdgeInsets.symmetric(horizontal: 0),
+          contentPadding: EdgeInsets.symmetric(horizontal: 0),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          title: Center(child: Text("OKUNAN BAĞLANTI")),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+          ),
+          content: _content(),
+          actions: [_alertDialogActions()],
+        ),
+      ),
+    );
+  }
+
+  Builder _content() {
+    return Builder(
+      builder: (context) {
+        var width = MediaQuery.of(context).size.width * 0.9;
+        return Container(
+          //height: height,
+          width: width,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Text(
+              result!.code!,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.grey[800],
+                fontSize: 20,
+                fontWeight: FontWeight.w900,
+                fontStyle: FontStyle.italic,
+                fontFamily: 'Open Sans',
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Row _alertDialogActions() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        ElevatedButton(
+          child: Text("İptal Et"),
+          style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.all<Color>(_lightColor.cancelRed)),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop();
+            alertState = true;
+          },
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        ElevatedButton(
+          child: Text(
+            "Bağlantıyı Aç",
+            style: TextStyle(),
+          ),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop();
+            alertState = true;
+            OpenUrl.openMap(result!.code!);
+          },
+        ),
+      ],
+    );
   }
 }

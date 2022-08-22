@@ -9,7 +9,7 @@ class OpenUrl {
       // ignore: deprecated_member_use
       await launch(_url);
     } else {
-      print("açılamadı");
+      print("verilen url açılamadı");
     }
   }
 }

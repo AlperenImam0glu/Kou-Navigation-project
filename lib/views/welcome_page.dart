@@ -113,19 +113,27 @@ class _WelcomePageViewState extends State<WelcomePageView> {
           ),
         ),
       ),
-      drawer: Drawer(
-        width: MediaQuery.of(context).size.width * 0.7,
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(color: _lightColor.kouGreen),
-              child: Center(child: Image.asset(kouLogoPath)),
-            ),
-            Container(
+      drawer: _drawer(context),
+    );
+  }
+
+  Drawer _drawer(BuildContext context) {
+    return Drawer(
+      backgroundColor: _lightColor.kouGreen,
+      width: MediaQuery.of(context).size.width * 0.7,
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(color: _lightColor.kouGreen),
+            child: Center(child: Image.asset(kouLogoPath)),
+          ),
+          Container(
+            child: Container(
+              color: _lightColor.scaffoldBackground,
+              height: MediaQuery.of(context).size.width * 2,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   ListTile(
                     leading: SizedBox(
@@ -197,8 +205,8 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -219,10 +227,6 @@ class _WelcomePageViewState extends State<WelcomePageView> {
 
   AppBar _customAppBar(BuildContext context) {
     return AppBar(
-      /*leading: Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: Image.asset(kouLogoPath),
-      ),*/
       leading: IconButton(
         icon: Image.asset(
           kouLogoPath,
@@ -239,7 +243,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
           ),
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const QRViewExample(),
+              builder: (context) => const QRCodeScannerView(),
             ));
           },
         )

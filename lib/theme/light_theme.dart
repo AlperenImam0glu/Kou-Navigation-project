@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class LighTheme {
   final _lightColor = LightColor();
-
   late ThemeData theme;
 
   LighTheme() {
@@ -14,30 +13,27 @@ class LighTheme {
           ),
         ),
       ),
-      scaffoldBackgroundColor: Color(0xFFfbfbfb),
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: Color(0xFF009e49)),
+      scaffoldBackgroundColor: _lightColor.scaffoldBackground,
+      floatingActionButtonTheme:
+          FloatingActionButtonThemeData(backgroundColor: _lightColor.kouGreen),
       buttonTheme: ButtonThemeData(
         colorScheme: ColorScheme.light(
-            onPrimary: Color(0xFF009e49), onSecondary: _lightColor.blueMenia),
+          onPrimary: _lightColor.kouGreen,
+        ),
       ),
-      colorScheme: const ColorScheme.light(
-        primary: Color(0xFF009e49),
+      colorScheme: ColorScheme.light(
+        primary: _lightColor.kouGreen,
       ),
       drawerTheme: DrawerThemeData(),
       textTheme: ThemeData.light().textTheme.copyWith(
-            subtitle1: TextStyle(fontSize: 25, color: _lightColor._textColor),
+            subtitle1: TextStyle(fontSize: 25),
           ),
     );
   }
 }
 
 class LightColor {
-  final Color _textColor = Color.fromARGB(255, 0, 0, 0);
-  final Color blueMenia = const Color.fromARGB(95, 188, 248, 1);
   var kouGreen = Color(0xFF009e49);
   var cancelRed = Color(0xFF9e1200);
-  //0xFF009e49
-  //0xFFcdb866
-  //0xFF231f20
+  var scaffoldBackground = Color(0xFFfbfbfb);
 }
