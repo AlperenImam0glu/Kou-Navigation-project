@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kou_navigation_project/core/open_url.dart';
 import 'package:kou_navigation_project/core/read_json_file.dart';
 import 'package:kou_navigation_project/models/json_data.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
@@ -7,6 +6,8 @@ import 'package:kou_navigation_project/theme/light_theme.dart';
 import 'package:kou_navigation_project/views/map_view.dart';
 import 'package:kou_navigation_project/views/qr_scanner.dart';
 import 'package:kou_navigation_project/views/search_page_view.dart';
+import 'package:kou_navigation_project/widgets/custom_alert_dialog_widget.dart';
+import 'package:kou_navigation_project/widgets/cutom_drawer_widget.dart';
 import 'package:location/location.dart';
 
 class WelcomePageView extends StatefulWidget {
@@ -24,6 +25,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   final String alertDialogAccept = "Konumu Göster";
   final String alertDialogCancel = "Seçimi İptal Et";
   final String kouLogoPath = "assets/icons/kou_pin_logo.png";
+  final String welcomePageObjetsPath = "assets/json/welcomePageLocatinos.json";
   final double projectPadding = 20;
   final double sizedBoxHeight = 20;
   final double buttonSize = 90;
@@ -38,15 +40,13 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   void initState() {
     super.initState();
     getCurrentLocation();
-
     getJsonList();
   }
 
   static List<Locations>? locationList = [];
   List<LocationModels> modelList = [];
   getJsonList() async {
-    locationList = await ReadJsonFile()
-        .readJsonWithPath("assets/json/welcomePageLocatinos.json");
+    locationList = await ReadJsonFile().readJsonWithPath(welcomePageObjetsPath);
     modelList = listToModel(locationList!);
     setState(() {});
   }
@@ -77,7 +77,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
                   flex: 5,
                   child: ListView(children: [
                     modelList.isEmpty == true
-                        ? Text("")
+                        ? Text("Yükleniyor..")
                         : Column(
                             children: [
                               _doubleElevatedButton(
@@ -113,101 +113,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
           ),
         ),
       ),
-      drawer: _drawer(context),
-    );
-  }
-
-  Drawer _drawer(BuildContext context) {
-    return Drawer(
-      backgroundColor: _lightColor.kouGreen,
-      width: MediaQuery.of(context).size.width * 0.7,
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(color: _lightColor.kouGreen),
-            child: Center(child: Image.asset(kouLogoPath)),
-          ),
-          Container(
-            child: Container(
-              color: _lightColor.scaffoldBackground,
-              height: MediaQuery.of(context).size.width * 2,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ListTile(
-                    leading: SizedBox(
-                        height: MediaQuery.of(context).size.width / 10,
-                        child: Image.asset(
-                          "assets/icons/chrome.png",
-                        )),
-                    title: Text('Web site',
-                        style: Theme.of(context).textTheme.subtitle2),
-                    onTap: () {
-                      OpenUrl.openMap("https://www.kocaeli.edu.tr/");
-                    },
-                  ),
-                  SizedBox(
-                    height: sizedBoxHeight,
-                  ),
-                  ListTile(
-                    leading: SizedBox(
-                        height: MediaQuery.of(context).size.width / 10,
-                        child: Image.asset("assets/icons/instagram.png")),
-                    title: Text("Instagram",
-                        style: Theme.of(context).textTheme.subtitle2),
-                    onTap: () {
-                      OpenUrl.openMap(
-                          "https://www.instagram.com/kou92official/");
-                    },
-                  ),
-                  SizedBox(
-                    height: sizedBoxHeight,
-                  ),
-                  ListTile(
-                    leading: SizedBox(
-                        height: MediaQuery.of(context).size.width / 10,
-                        child: Image.asset("assets/icons/facebook.png")),
-                    title: Text("Facebook",
-                        style: Theme.of(context).textTheme.subtitle2),
-                    onTap: () {
-                      OpenUrl.openMap(
-                          "https://www.facebook.com/kou92official/");
-                    },
-                  ),
-                  SizedBox(
-                    height: sizedBoxHeight,
-                  ),
-                  ListTile(
-                    leading: SizedBox(
-                        height: MediaQuery.of(context).size.width / 10,
-                        child: Image.asset("assets/icons/twitter.png")),
-                    title: Text("Twitter",
-                        style: Theme.of(context).textTheme.subtitle2),
-                    onTap: () {
-                      OpenUrl.openMap("https://twitter.com/kou92official");
-                    },
-                  ),
-                  SizedBox(
-                    height: sizedBoxHeight,
-                  ),
-                  ListTile(
-                    leading: SizedBox(
-                        height: MediaQuery.of(context).size.width / 10,
-                        child: Image.asset("assets/icons/youtube.png")),
-                    title: Text("Youtube",
-                        style: Theme.of(context).textTheme.subtitle2),
-                    onTap: () {
-                      OpenUrl.openMap(
-                          "https://www.youtube.com/c/kocaeli%C3%BCniversitesi");
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+      drawer: CustomDrawer(),
     );
   }
 
@@ -311,7 +217,10 @@ class _WelcomePageViewState extends State<WelcomePageView> {
       onPressed: () {
         showDialog(
           context: context,
-          builder: (_) => _aletDialog(location),
+          builder: (_) => CustomAlertDialog(
+            location: location,
+            context: context,
+          ),
         );
       },
       child: Container(
