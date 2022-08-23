@@ -151,7 +151,11 @@ class CustomDrawer extends StatelessWidget {
           ),
           actions: [
             Center(
-                child: ElevatedButton(onPressed: () {}, child: Text("Tamam")))
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).pop();
+                    },
+                    child: Text("Tamam")))
           ],
         ),
       ),
