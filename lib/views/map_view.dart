@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:kou_navigation_project/constant/constant.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
 import 'package:kou_navigation_project/core/routing_googlemap_app.dart';
@@ -36,15 +37,30 @@ class MapViewState extends State<MapView> {
   final double floatingActionButtonTextSize = 15;
   static bool locationPermission = true;
   static bool isLocationEnable = true;
+  bool networkConnection = false;
   final _lightColor = LightColor();
+  final String networkCheckText = "İnternet Bağlantınızı Kontrol Ediniz";
+
   @override
   void initState() {
     super.initState();
     _startingCameraLat = locationModel.lat!;
     _startingCameraLng = locationModel.lng!;
+    checkNetwork();
     getCurrentLocation();
     _goSelectedLocation(lat: locationModel.lat!, lng: locationModel.lng!);
     mapDrawTimer();
+  }
+
+  void checkNetwork() async {
+    bool result = await InternetConnectionChecker().hasConnection;
+    if (result == true) {
+      print('İnternet Bağlantısı var');
+      networkConnection = true;
+    } else {
+      print('İnternet Bağlantısı yok');
+      internetConnecitonAlert();
+    }
   }
 
   MapViewState(this.locationModel);
@@ -70,9 +86,9 @@ class MapViewState extends State<MapView> {
             textAlign: TextAlign.center,
           ),
           centerTitle: true),
-      body: currentLocations == null
-          ? _googleMapWidgetNoLine()
-          : _googleMapWidget(),
+      body: !(currentLocations == null)
+          ? _googleMapWidget()
+          : _googleMapWidgetNoLine(),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: _floatingActionButtonGoMap(),
     );
@@ -134,19 +150,21 @@ class MapViewState extends State<MapView> {
 
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      google_api_key,
-      PointLatLng(startPoint.latitude, startPoint.longitude),
-      PointLatLng(finishPoint.latitude, finishPoint.longitude),
-      travelMode: TravelMode.walking,
-    );
+    if (networkConnection) {
+      PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        google_api_key,
+        PointLatLng(startPoint.latitude, startPoint.longitude),
+        PointLatLng(finishPoint.latitude, finishPoint.longitude),
+        travelMode: TravelMode.walking,
+      );
 
-    if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) =>
-          polylineCoordinates.add(LatLng(point.latitude, point.longitude)));
-    }
-    if (mounted) {
-      setState(() {});
+      if (result.points.isNotEmpty) {
+        result.points.forEach((PointLatLng point) =>
+            polylineCoordinates.add(LatLng(point.latitude, point.longitude)));
+      }
+      if (mounted) {
+        setState(() {});
+      }
     }
   }
 
@@ -165,24 +183,6 @@ class MapViewState extends State<MapView> {
         color: Colors.white,
       ),
     );
-  }
-
-  Center _circularProgress() {
-    return Center(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          height: circularProgressIndicatorHeigt,
-          width: circularProgressIndicatorHeigt,
-          child: CircularProgressIndicator(),
-        ),
-        Text(
-          progressTitle,
-          style: TextStyle(fontSize: circularProgressIndicatorTextSize),
-        ),
-      ],
-    ));
   }
 
   GoogleMap _googleMapWidget() {
@@ -239,6 +239,52 @@ class MapViewState extends State<MapView> {
     controller.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(target: LatLng(lat, lng), zoom: _cameraZoom),
+      ),
+    );
+  }
+
+  void internetConnecitonAlert() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) => WillPopScope(
+        onWillPop: () async {
+          return true;
+        },
+        child: AlertDialog(
+          title: Center(
+              child: Icon(
+            Icons.wifi_off_outlined,
+            size: (MediaQuery.of(context).size.width * 0.2),
+            color: _lightColor.cancelRed,
+          )),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+          ),
+          content: Text(
+            networkCheckText,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.grey[800],
+              fontWeight: FontWeight.w900,
+              fontStyle: FontStyle.italic,
+              fontFamily: 'Open Sans',
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+                child: Center(
+                  child: Text(
+                    "Tamam",
+                  ),
+                ))
+          ],
+        ),
       ),
     );
   }

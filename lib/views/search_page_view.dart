@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kou_navigation_project/core/read_json_file.dart';
 import 'package:kou_navigation_project/models/json_data.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
-import 'package:kou_navigation_project/views/map_view.dart';
 import 'package:kou_navigation_project/theme/light_theme.dart';
 import 'package:kou_navigation_project/widgets/custom_alert_dialog_widget.dart';
 
@@ -28,6 +27,7 @@ class _SearchPageViewState extends State<SearchPageView> {
   final double faildSearchsize = 20;
   final double projectBorderRadius = 20;
   final double listViewIconSize = 35;
+
   bool focus = true;
   final _lightColor = LightColor();
 
@@ -77,7 +77,7 @@ class _SearchPageViewState extends State<SearchPageView> {
                       locationList?.isEmpty == true
                           ? Center(child: CircularProgressIndicator())
                           : Expanded(
-                              flex: 7,
+                              flex: 10,
                               child: searchList!.length < 1
                                   ? Text(searchFaild,
                                       style: TextStyle(
@@ -85,7 +85,8 @@ class _SearchPageViewState extends State<SearchPageView> {
                                       ))
                                   : Padding(
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: projectPadding + 5),
+                                          horizontal: projectPadding + 5,
+                                          vertical: 5),
                                       child: customListView()),
                             ),
                     ],
@@ -102,7 +103,7 @@ class _SearchPageViewState extends State<SearchPageView> {
       autofocus: focus,
       decoration: InputDecoration(
         isDense: true,
-        contentPadding: EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
+        contentPadding: EdgeInsets.fromLTRB(5.0, 20.0, 5.0, 1.0),
         prefixIcon: Icon(Icons.search_outlined),
         suffixIcon: IconButton(
           onPressed: () {
@@ -162,8 +163,8 @@ class _SearchPageViewState extends State<SearchPageView> {
 
   void searchLocation(String query) {
     final suggestion = locationList!.where((element) {
-      final name = element.name!.toLowerCase();
-      final input = query.toLowerCase();
+      final name = changeTurkishCharacters(element.name!.toLowerCase());
+      final input = changeTurkishCharacters(query.toLowerCase());
       if (name.contains(input) == false) {
         return name.contains(input);
       } else {
@@ -173,5 +174,18 @@ class _SearchPageViewState extends State<SearchPageView> {
     setState(() {
       searchList = suggestion;
     });
+  }
+
+  String changeTurkishCharacters(String query) {
+    for (int i = 0; i < query.length; i++) {
+      query = query.replaceFirst(RegExp('ç'), 'c');
+      query = query.replaceFirst(RegExp('ğ'), 'g');
+      query = query.replaceFirst(RegExp('i'), 'ı');
+      query = query.replaceFirst(RegExp('ö'), 'o');
+      query = query.replaceFirst(RegExp('ş'), 's');
+      query = query.replaceFirst(RegExp('ü'), 'u');
+    }
+
+    return query;
   }
 }

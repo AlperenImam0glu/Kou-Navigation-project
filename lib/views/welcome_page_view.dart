@@ -4,7 +4,7 @@ import 'package:kou_navigation_project/core/read_json_file.dart';
 import 'package:kou_navigation_project/models/json_data.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
 import 'package:kou_navigation_project/theme/light_theme.dart';
-import 'package:kou_navigation_project/views/qr_scanner.dart';
+import 'package:kou_navigation_project/views/qr_scanner_view.dart';
 import 'package:kou_navigation_project/views/search_page_view.dart';
 import 'package:kou_navigation_project/widgets/custom_alert_dialog_widget.dart';
 import 'package:kou_navigation_project/widgets/cutom_drawer_widget.dart';
@@ -29,6 +29,8 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   final double projectPadding = 20;
   final double sizedBoxHeight = 20;
   final double buttonSize = 90;
+  final String networkCheckText = "İnternet Bağlantınızı Kontrol Ediniz";
+  final _lightColor = LightColor();
   var scaffoldKey = GlobalKey<ScaffoldState>();
   bool networkConnection = false;
   void getCurrentLocation() {
@@ -50,8 +52,8 @@ class _WelcomePageViewState extends State<WelcomePageView> {
       print('İnternet Bağlantısı var');
       networkConnection = true;
     } else {
-      print('No internet :( Reason:');
-      showDialogs();
+      print('İnternet Bağlantısı yok');
+      internetConnecitonAlert();
     }
   }
 
@@ -253,7 +255,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
     );
   }
 
-  void showDialogs() {
+  void internetConnecitonAlert() {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -262,13 +264,19 @@ class _WelcomePageViewState extends State<WelcomePageView> {
           return true;
         },
         child: AlertDialog(
+          title: Center(
+              child: Icon(
+            Icons.wifi_off_outlined,
+            size: (MediaQuery.of(context).size.width * 0.2),
+            color: _lightColor.cancelRed,
+          )),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(10.0),
             ),
           ),
           content: Text(
-            "İNTERNET BAĞLANTINIZI KONTROL EDİNİZ",
+            networkCheckText,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.grey[800],

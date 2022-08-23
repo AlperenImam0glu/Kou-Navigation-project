@@ -28,6 +28,9 @@ class CustomDrawer extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                SizedBox(
+                  height: sizedBoxHeight,
+                ),
                 ListTile(
                   leading: SizedBox(
                       height: MediaQuery.of(context).size.width / 10,

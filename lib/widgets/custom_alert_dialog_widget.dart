@@ -12,8 +12,8 @@ final _lightColor = LightColor();
 class CustomAlertDialog extends StatefulWidget {
   CustomAlertDialog({Key? key, required this.location, required this.context})
       : super(key: key);
-  LocationModels location;
-  BuildContext context;
+  final LocationModels location;
+  final BuildContext context;
 
   @override
   State<CustomAlertDialog> createState() =>
