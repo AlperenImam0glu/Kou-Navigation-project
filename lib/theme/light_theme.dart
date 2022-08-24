@@ -36,4 +36,5 @@ class LightColor {
   var kouGreen = Color(0xFF009e49);
   var cancelRed = Color(0xFF9e1200);
   var scaffoldBackground = Color(0xFFfbfbfb);
+  var kouBlack = Color(0xFF231f20);
 }

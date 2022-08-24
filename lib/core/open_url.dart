@@ -3,13 +3,15 @@ import 'package:url_launcher/url_launcher.dart';
 class OpenUrl {
   OpenUrl._();
 
-  static Future<void> openMap(String _url) async {
-    // ignore: deprecated_member_use
-    if (await canLaunch(_url)) {
-      // ignore: deprecated_member_use
+  static Future<bool> openMap(String _url) async {
+    try {
+// ignore: deprecated_member_use
       await launch(_url);
-    } else {
+      return true;
+    } catch (e) {
       print("verilen url açılamadı");
+      print('Something really unknown: $e');
+      return false;
     }
   }
 }

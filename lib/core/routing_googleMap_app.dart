@@ -12,7 +12,7 @@ class MapUtils {
       // ignore: deprecated_member_use
       await launch(_url);
     } else {
-      throw 'Could not open the map.';
+      print("harita açılamadı");
     }
   }
 }

@@ -104,7 +104,15 @@ class _SearchPageViewState extends State<SearchPageView> {
       decoration: InputDecoration(
         isDense: true,
         contentPadding: EdgeInsets.fromLTRB(5.0, 20.0, 5.0, 1.0),
-        prefixIcon: Icon(Icons.search_outlined),
+        prefixIcon: Icon(
+          Icons.search_outlined,
+          size: 25,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(projectBorderRadius),
+          borderSide:
+              BorderSide(color: Color.fromARGB(255, 39, 39, 39), width: 1.5),
+        ),
         suffixIcon: IconButton(
           onPressed: () {
             textFieldController.text = emptyText;
@@ -112,7 +120,9 @@ class _SearchPageViewState extends State<SearchPageView> {
               searchList = locationList;
             });
           },
-          icon: Icon(Icons.clear),
+          icon: Icon(
+            Icons.clear,
+          ),
         ),
         hintText: textFieldTitle,
         border: OutlineInputBorder(

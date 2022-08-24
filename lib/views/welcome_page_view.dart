@@ -29,6 +29,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   final double projectPadding = 20;
   final double sizedBoxHeight = 20;
   final double buttonSize = 90;
+  double screenHeigt = 0;
   final String networkCheckText = "İnternet Bağlantınızı Kontrol Ediniz";
   final _lightColor = LightColor();
   var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -77,6 +78,11 @@ class _WelcomePageViewState extends State<WelcomePageView> {
           child: Center(
             child: Column(
               children: [
+                MediaQuery.of(context).size.height > 850
+                    ? SizedBox(
+                        height: 30,
+                      )
+                    : SizedBox(),
                 Expanded(
                   flex: 1,
                   child: Padding(
@@ -185,6 +191,7 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   ElevatedButton _searchButton() {
     return ElevatedButton.icon(
       onPressed: () {
+        print(MediaQuery.of(context).size.height);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => SearchPageView()),

@@ -341,6 +341,30 @@
       "Name": "Sosyal Bilimler Enstitüsü",
       "Lat": 40.821334,
       "Lng": 29.927808
+    },
+    {
+      "Id": "58",
+      "Name": "Mühendislik Fakültesi C Kapısı",
+      "Lat": 40.821421,
+      "Lng": 29.923730
+    },
+    {
+      "Id": "59",
+      "Name": "Mühendislik Fakültesi D Kapısı",
+      "Lat": 40.820960,
+      "Lng": 29.923263
+    },
+    {
+      "Id": "60",
+      "Name": "Mühendislik Fakültesi F Kapısı",
+      "Lat": 40.821504,
+      "Lng": 29.922394
+    },
+    {
+      "Id": "61",
+      "Name": "Mühendislik Fakültesi G Kapısı",
+      "Lat": 40.821609,
+      "Lng": 29.922481
     }
   ]
 }
