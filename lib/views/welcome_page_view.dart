@@ -34,6 +34,9 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   final _lightColor = LightColor();
   var scaffoldKey = GlobalKey<ScaffoldState>();
   bool networkConnection = false;
+  static List<Locations>? locationList = [];
+  List<LocationModels> modelList = [];
+
   void getCurrentLocation() {
     Location location = Location();
     location.getLocation().then((location) {});
@@ -58,8 +61,6 @@ class _WelcomePageViewState extends State<WelcomePageView> {
     }
   }
 
-  static List<Locations>? locationList = [];
-  List<LocationModels> modelList = [];
   getJsonList() async {
     locationList = await ReadJsonFile().readJsonWithPath(welcomePageObjetsPath);
     modelList = listToModel(locationList!);
