@@ -4,8 +4,7 @@ class MapUtils {
   MapUtils._();
 
   static Future<void> openMap(double latitude, double longitude) async {
-    String _url =
-        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+    String _url = 'https://www.google.com/maps/dir//$latitude,$longitude';
 
     // ignore: deprecated_member_use
     if (await canLaunch(_url)) {

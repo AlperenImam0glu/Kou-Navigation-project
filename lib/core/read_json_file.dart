@@ -1,18 +1,19 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:kou_navigation_project/core/file_islemleri.dart';
 import 'package:kou_navigation_project/models/json_data.dart';
 
 class ReadJsonFile {
   String filePath = "assets/json/locations.json";
   Future readJson() async {
-    final String response = await rootBundle.loadString(filePath);
-    final data = await json.decode(response);
-
     JsonLocation jsonConverter = JsonLocation();
+    List<Locations>? locationList = [];
 
-    jsonConverter.fromJson(data);
-    List<Locations>? locationList = jsonConverter.getLocationList();
-
+    String deger = await DosyaIslemleri.okunacakDosya();
+    print(deger);
+    final body = json.decode(deger);
+    jsonConverter.fromJson(body);
+    locationList = jsonConverter.getLocationList();
     return locationList;
   }
 
@@ -27,4 +28,6 @@ class ReadJsonFile {
 
     return locationList;
   }
+
+  void _Oku() async {}
 }

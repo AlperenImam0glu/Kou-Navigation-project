@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kou_navigation_project/core/firebase_service.dart';
 import 'package:kou_navigation_project/theme/light_theme.dart';
 import 'package:kou_navigation_project/views/welcome_page_view.dart';
 
 void main() {
+  FirebaseService.fireBasegetData();
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
