@@ -158,9 +158,9 @@ class _SearchPageViewState extends State<SearchPageView> {
                 context: context,
                 builder: (_) => CustomAlertDialog(
                   location: LocationModels(
-                      name: locationList![index].name,
-                      lat: locationList![index].lat,
-                      lng: locationList![index].lng),
+                      name: locationList![int.parse(item.id!) - 1].name,
+                      lat: locationList![int.parse(item.id!) - 1].lat,
+                      lng: locationList![int.parse(item.id!) - 1].lng),
                   context: context,
                 ),
               );
