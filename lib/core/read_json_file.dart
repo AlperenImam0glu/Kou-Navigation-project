@@ -28,6 +28,4 @@ class ReadJsonFile {
 
     return locationList;
   }
-
-  void _Oku() async {}
 }

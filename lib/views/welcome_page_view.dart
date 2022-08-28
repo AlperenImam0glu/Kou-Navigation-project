@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:kou_navigation_project/core/file_islemleri.dart';
-import 'package:kou_navigation_project/core/firebase_service.dart';
 import 'package:kou_navigation_project/core/read_json_file.dart';
 import 'package:kou_navigation_project/models/json_data.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
