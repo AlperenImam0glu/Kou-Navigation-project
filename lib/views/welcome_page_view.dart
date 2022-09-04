@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:kou_navigation_project/core/firebase_service.dart';
 import 'package:kou_navigation_project/core/read_json_file.dart';
 import 'package:kou_navigation_project/models/json_data.dart';
 import 'package:kou_navigation_project/models/location_model.dart';
@@ -29,28 +32,27 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   final double projectPadding = 20;
   final double sizedBoxHeight = 20;
   final double buttonSize = 90;
-  double screenHeigt = 0;
-  final String networkCheckText = "İnternet Bağlantınızı Kontrol Ediniz";
+  final String networkCheckText = "Devam etmek için internet bağlantısını açın";
   final _lightColor = LightColor();
   var scaffoldKey = GlobalKey<ScaffoldState>();
   bool networkConnection = false;
   static List<Locations>? locationList = [];
   List<LocationModels> modelList = [];
 
-  void getCurrentLocation() {
-    Location location = Location();
-    location.getLocation().then((location) {});
-  }
-
   @override
   void initState() {
     super.initState();
     getCurrentLocation();
     getJsonList();
-    checkNetwork();
+    checkNetworkWithAlert();
   }
 
-  void checkNetwork() async {
+  void getCurrentLocation() {
+    Location location = Location();
+    location.getLocation().then((location) {});
+  }
+
+  void checkNetworkWithAlert() async {
     bool result = await InternetConnectionChecker().hasConnection;
     if (result == true) {
       print('İnternet Bağlantısı var');
@@ -58,6 +60,17 @@ class _WelcomePageViewState extends State<WelcomePageView> {
     } else {
       print('İnternet Bağlantısı yok');
       internetConnecitonAlert();
+    }
+  }
+
+  void checkNetwork() async {
+    bool result = await InternetConnectionChecker().hasConnection;
+    if (result == true) {
+      print('İnternet Bağlantısı var');
+      networkConnection = true;
+      setState(() {});
+    } else {
+      print('İnternet Bağlantısı yok');
     }
   }
 
@@ -141,7 +154,6 @@ class _WelcomePageViewState extends State<WelcomePageView> {
 
   List<LocationModels> listToModel(List<Locations> locationList) {
     List<LocationModels> models = [];
-
     for (var element in locationList) {
       LocationModels model = LocationModels();
       model.name = element.name;
@@ -149,7 +161,6 @@ class _WelcomePageViewState extends State<WelcomePageView> {
       model.lng = element.lng;
       models.add(model);
     }
-
     return models;
   }
 
@@ -188,8 +199,6 @@ class _WelcomePageViewState extends State<WelcomePageView> {
       centerTitle: true,
     );
   }
-
-  var gosterilecekDeger = "";
 
   ElevatedButton _searchButton() {
     return ElevatedButton.icon(
@@ -265,49 +274,60 @@ class _WelcomePageViewState extends State<WelcomePageView> {
     );
   }
 
-  void internetConnecitonAlert() {
+  internetConnecitonAlert() {
     showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (_) => WillPopScope(
-        onWillPop: () async {
-          return true;
-        },
-        child: AlertDialog(
-          title: Center(
-              child: Icon(
-            Icons.wifi_off_outlined,
-            size: (MediaQuery.of(context).size.width * 0.2),
-            color: _lightColor.cancelRed,
-          )),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(10.0),
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext builderContext) {
+          var counter = 240;
+          Timer.periodic(const Duration(seconds: 1), (timer) {
+            if (networkConnection == true) {
+              FirebaseService.fireBasegetData();
+              Navigator.of(context, rootNavigator: true).pop();
+              timer.cancel();
+            }
+            checkNetwork();
+            if (counter == 0) {
+              timer.cancel();
+            }
+            counter--;
+          });
+
+          return WillPopScope(
+            onWillPop: () async {
+              return false;
+            },
+            child: AlertDialog(
+              title: Center(
+                  child: Icon(
+                Icons.wifi_off_outlined,
+                size: (MediaQuery.of(context).size.width * 0.2),
+                color: _lightColor.cancelRed,
+              )),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
+                ),
+              ),
+              content: Text(
+                networkCheckText,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.grey[800],
+                  fontWeight: FontWeight.w900,
+                  fontStyle: FontStyle.italic,
+                  fontFamily: 'Open Sans',
+                ),
+              ),
+              actions: [
+                Center(
+                    child: Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: CircularProgressIndicator(),
+                )),
+              ],
             ),
-          ),
-          content: Text(
-            networkCheckText,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.grey[800],
-              fontWeight: FontWeight.w900,
-              fontStyle: FontStyle.italic,
-              fontFamily: 'Open Sans',
-            ),
-          ),
-          actions: [
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop();
-                },
-                child: Center(
-                  child: Text(
-                    "Tamam",
-                  ),
-                ))
-          ],
-        ),
-      ),
-    );
+          );
+        });
   }
 }

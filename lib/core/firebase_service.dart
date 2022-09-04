@@ -6,16 +6,17 @@ class FirebaseService {
   static fireBasegetData() async {
     const url =
         "https://kounavigationproject-default-rtdb.europe-west1.firebasedatabase.app/.json";
+    try {
+      Response cevap = await http.get(Uri.parse(url));
 
-    Response cevap = await http.get(Uri.parse(url));
+      if (cevap.statusCode == 200) {
+        print('Api isteği başarılı');
+      }
 
-    if (cevap.statusCode == 200) {
-      print('Api isteği başarılı');
-    }
-
-    if (cevap.body.isNotEmpty) {
-      yaz(veriyiDuzenle(cevap.body));
-    }
+      if (cevap.body.isNotEmpty) {
+        yaz(veriyiDuzenle(cevap.body));
+      }
+    } catch (e) {}
   }
 
   static String veriyiDuzenle(String response) {
