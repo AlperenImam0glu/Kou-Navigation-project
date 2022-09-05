@@ -203,7 +203,6 @@ class _WelcomePageViewState extends State<WelcomePageView> {
   ElevatedButton _searchButton() {
     return ElevatedButton.icon(
       onPressed: () async {
-        print(MediaQuery.of(context).size.height);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => SearchPageView()),

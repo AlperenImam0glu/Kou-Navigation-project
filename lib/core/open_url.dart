@@ -9,8 +9,7 @@ class OpenUrl {
       await launch(_url);
       return true;
     } catch (e) {
-      print("verilen url açılamadı");
-      print('Something really unknown: $e');
+      print("verilen url açılamadı $e");
       return false;
     }
   }

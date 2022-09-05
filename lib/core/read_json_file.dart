@@ -10,7 +10,7 @@ class ReadJsonFile {
     List<Locations>? locationList = [];
 
     String deger = await DosyaIslemleri.okunacakDosya();
-    print(deger);
+
     final body = json.decode(deger);
     jsonConverter.fromJson(body);
     locationList = jsonConverter.getLocationList();
